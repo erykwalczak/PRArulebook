@@ -1,0 +1,16 @@
+citHeader("To cite PRArulebook in publications use:")
+
+citEntry(
+  entry    = "Article",
+  title    = "Textual complexity of banking regulation",
+  author   = "Zahid Amadxarif, James Brookes, Nicola Garbarino, Rajan Patel and Eryk Walczak",
+  journal  = "Bank of England Staff Working Paper No. xxx",
+  year     = "2019",
+  volume   = ,
+  number   = ,
+  pages    = ,
+  url      = "https://www.bankofengland.co.uk/working-paper/staff-working-papers",
+  textVersion = paste(
+
+  )
+)
