@@ -1,10 +1,10 @@
 Package: PRArulebook
-Title: What the Package Does (one line, title case)
+Title: Get the Prudential Regulation Authority rulebook
 Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
+Authors@R: person("Eryk", "Walczak", email = "erykjwalczak@gmail.com", role = c("aut", "cre"))
 Description: What the package does (one paragraph).
 Depends: R (>= 3.6.0)
-License: What license is it under?
+License: GPL3
 Encoding: UTF-8
 LazyData: true
 Suggests: 
@@ -16,5 +16,6 @@ Imports:
     dplyr,
     rvest,
     httr,
-    lubridate
+    lubridate,
+    magrittr
 RoxygenNote: 6.1.1
