@@ -13,8 +13,9 @@
 #' get_structure("16-11-2007")
 #' get_structure("16-11-2007", layer = "sector")
 #' get_structure("16-11-2007", layer = "part")
+#' get_structure("16-11-2007", layer = "chapter")
 #' }
-get_structure <- function(date, layer = "all") {
+get_structure <- function(date, layer = "chapter") {
   # assign the error message
   date_error_message <- "Provide a correct date in dd-mm-yyyy format. From '01-01-2005' till today."
 
@@ -31,8 +32,8 @@ get_structure <- function(date, layer = "all") {
   }
 
   # validate type
-  if (!(layer %in% c("rule", "chapter", "part", "sector", "all"))) {
-    stop("Provide a layer to scrape. Available options: rule, chapter, part, sector, all.")
+  if (!(layer %in% c("rule", "chapter", "part", "sector"))) {
+    stop("Provide a layer to scrape. Available options: rule, chapter, part, sector.")
   }
 
   # full URL example: http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007
@@ -85,17 +86,6 @@ get_structure <- function(date, layer = "all") {
   ##############
   ### PARTS ###
   ############
-  # cat("\n")
-  # cat("--- Scraping PARTS ---")
-  # cat("\n")
-  # parts <- lapply(sectors$sector_url, scrape_menu, selector = ".Part a")
-  # parts <- dplyr::bind_rows(parts)
-  # colnames(parts) <- c("part_name", "part_url", "sector_url")
-  # # clean the part names
-  # parts$part_name <- trimws(parts$part_name)
-  #
-  # # join sector names to 'parts'
-  # parts_sectors <- dplyr::left_join(parts, sectors)
 
   if (layer == "part") {
     sector_structure <- scrape_sector_structure(top_url)
@@ -119,14 +109,12 @@ get_structure <- function(date, layer = "all") {
   # # join chapters to parts and sectors
   # chapters_parts_sectors <- dplyr::left_join(chapters, parts_sectors)
 
-  #######################
-  ### RETURN OPTIONS ###
-  #####################
-
   # TODO figure out return options. use lists to return everything ?
-  if (layer == "all") {
-    # TODO create a list with every layer
-    return(chapters_parts_sectors)
+  if (layer == "chapter") {
+    sector_structure <- scrape_sector_structure(top_url)
+    part_structure <- scrape_part_structure(sector_structure)
+    chapter_structure <- scrape_chapter_structure(part_structure)
+    return(chapter_structure)
   }
 
   if (layer == "rule") {
@@ -147,10 +135,6 @@ get_structure <- function(date, layer = "all") {
     rules_chapters_parts_sectors <- dplyr::left_join(rules, chapters_parts_sectors)
 
     return(rules)
-  }
-
-  if (layer == "chapter") {
-    return(chapters_parts_sectors)
   }
 
 }

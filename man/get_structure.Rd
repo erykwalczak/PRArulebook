@@ -4,7 +4,7 @@
 \alias{get_structure}
 \title{Scrape the Rulebook structure}
 \usage{
-get_structure(date, layer = "all")
+get_structure(date, layer = "chapter")
 }
 \arguments{
 \item{date}{Date of the rulebook. Use dd-mm-yyyy format.}
@@ -21,5 +21,7 @@ High-level function to scrape the rulebook structure.
 \dontrun{
 get_structure("16-11-2007")
 get_structure("16-11-2007", layer = "sector")
+get_structure("16-11-2007", layer = "part")
+get_structure("16-11-2007", layer = "chapter")
 }
 }

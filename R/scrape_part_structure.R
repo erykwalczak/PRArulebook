@@ -15,6 +15,7 @@ scrape_part_structure <- function(df) {
   # clean the part names
   parts$part_name <- trimws(parts$part_name)
   # join sector names to 'parts'
-  parts_sectors <- dplyr::left_join(parts, df)
+  parts_sectors <-
+    dplyr::left_join(parts, df, by = "sector_url")
   return(parts_sectors)
 }
