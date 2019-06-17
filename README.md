@@ -1,7 +1,3 @@
-PRArulebook
-================
-Eryk Walczak
-2019-06-16
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -9,9 +5,14 @@ Eryk Walczak
 
 <!-- badges: start -->
 
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/PRArulebook)](https://cran.r-project.org/package=PRArulebook)
 <!-- badges: end -->
 
-The goal of PRArulebook is to …
+The goal of PRArulebook is to scrape the Prudential Regulation Authority
+[rulebook](http://www.prarulebook.co.uk/)
 
 ## Installation
 

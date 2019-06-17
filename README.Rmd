@@ -1,7 +1,4 @@
 ---
-title: "PRArulebook"
-author: "Eryk Walczak"
-date: "`r Sys.Date()`" 
 output: github_document
 ---
 
@@ -18,9 +15,11 @@ knitr::opts_chunk$set(
 # PRArulebook
 
 <!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![CRAN status](https://www.r-pkg.org/badges/version/PRArulebook)](https://cran.r-project.org/package=PRArulebook)
 <!-- badges: end -->
 
-The goal of PRArulebook is to ...
+The goal of PRArulebook is to scrape the Prudential Regulation Authority [rulebook](http://www.prarulebook.co.uk/)
 
 ## Installation
 
