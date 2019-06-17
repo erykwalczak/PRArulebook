@@ -61,10 +61,11 @@ get_structure <- function(date, layer = "all") {
   }
 
   # message
-  cat(paste("You are requesting a", rule_type, "as of", date))
+  cat(paste("You are requesting the", rule_type, "as of", date))
   cat("\n")
 
   # top URL
+  base_url <- "http://www.prarulebook.co.uk"
   top_url <- paste0(base_url, "/rulebook/Home/", rule_type, "/", date)
 
   ################
@@ -76,7 +77,8 @@ get_structure <- function(date, layer = "all") {
   # colnames(sectors) <- c("sector_name", "sector_url", "rulebook_url")
 
   if (layer == "sector") {
-    scrape_sectors_structure()
+    sector_structure <- scrape_sector_structure(top_url)
+    return(sector_structure)
   }
 
   ##############
@@ -95,8 +97,8 @@ get_structure <- function(date, layer = "all") {
   # parts_sectors <- dplyr::left_join(parts, sectors)
 
   if (layer == "part") {
-    scrape_sectors_structure()
-    scrape_parts_structure()
+    scrape_sector_structure()
+    scrape_part_structure()
   }
 
   #################
@@ -139,6 +141,7 @@ get_structure <- function(date, layer = "all") {
 
     # join chapters to parts and sectors
     # TODO find why duplicated created in 2007
+    # TODO join on chapter URL !!! not name
     rules_chapters_parts_sectors <- dplyr::left_join(rules, chapters_parts_sectors)
 
     return(rules)
