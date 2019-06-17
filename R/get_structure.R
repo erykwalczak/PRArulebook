@@ -12,6 +12,7 @@
 #' \dontrun{
 #' get_structure("16-11-2007")
 #' get_structure("16-11-2007", layer = "sector")
+#' get_structure("16-11-2007", layer = "part")
 #' }
 get_structure <- function(date, layer = "all") {
   # assign the error message
@@ -97,8 +98,9 @@ get_structure <- function(date, layer = "all") {
   # parts_sectors <- dplyr::left_join(parts, sectors)
 
   if (layer == "part") {
-    scrape_sector_structure()
-    scrape_part_structure()
+    sector_structure <- scrape_sector_structure(top_url)
+    part_structure <- scrape_part_structure(sector_structure)
+    return(part_structure)
   }
 
   #################

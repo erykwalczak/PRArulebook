@@ -4,7 +4,10 @@
 \alias{scrape_part_structure}
 \title{Scrape part structure}
 \usage{
-scrape_part_structure()
+scrape_part_structure(df)
+}
+\arguments{
+\item{df}{Data frame with sector URLs. Output of \code{"scrape_sector_structure"}.}
 }
 \value{
 Data frame with scraped part structure.
