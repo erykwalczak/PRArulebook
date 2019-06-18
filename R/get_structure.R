@@ -25,9 +25,7 @@ get_structure <- function(date, layer = "chapter") {
   }
 
   # validate the input format
-  #library(lubridate) # TODO suppress messages
-  # TODO: import functions from packages
-  if (!lubridate::is.Date(as.Date(date, format = "%d-%m-%Y"))) {
+  if (is.na(as.Date(date, format = "%d-%m-%Y"))) {
     stop(date_error_message)
   }
 
