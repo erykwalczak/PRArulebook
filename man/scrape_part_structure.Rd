@@ -15,3 +15,9 @@ Data frame with scraped part structure.
 \description{
 Scrape part structure
 }
+\examples{
+\dontrun{
+sectors <- scrape_sector_structure("http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007")
+scrape_part_structure(sectors)
+}
+}

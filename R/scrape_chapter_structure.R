@@ -3,14 +3,23 @@
 #' @param df Data frame with part URLs. Output of \code{"scrape_part_structure"}.
 #'
 #' @return Data frame with scraped chapter structure.
+#' @export
 #'
 #' @examples
+#' \dontrun{
+#' sectors <- scrape_sector_structure("http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007")
+#' parts <- scrape_part_structure(sectors)
+#' scrape_chapter_structure(parts)
+#' }
 scrape_chapter_structure <- function(df) {
+  cat("\n")
   cat("--- Scraping CHAPTERS ---")
   cat("\n")
+  # get all chapters and append to a data frame
+  chapters <-
+    purrr::map_df(df[["part_url"]],
+                  scrape_menu, selector = ".Chapter a")
 
-  chapters <- lapply(df[["part_url"]], scrape_menu, selector = ".Chapter a")
-  chapters <- dplyr::bind_rows(chapters)
   colnames(chapters) <- c("chapter_name", "chapter_url", "part_url")
 
   # clean the chapter names
