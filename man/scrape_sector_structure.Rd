@@ -15,3 +15,8 @@ Data frame with scraped sector structure.
 \description{
 Scrape sector structure
 }
+\examples{
+\dontrun{
+scrape_sector_structure("http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007")
+}
+}
