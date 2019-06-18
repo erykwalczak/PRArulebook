@@ -23,6 +23,8 @@ scrape_menu <- function(url, selector, structure_type = "both") {
   cat(".")
 
   # pull the html nodes
+  # TODO add ua
+  # TODO test return values
   nodes_only <- httr::GET(url) %>%
     xml2::read_html() %>%
     rvest::html_nodes(selector)
@@ -42,9 +44,7 @@ scrape_menu <- function(url, selector, structure_type = "both") {
     paste0(base_url, .)
   # check if element is effective
   # nodes have no text then this element is not effective
-  if (is.na(nodes_text)) {
-    nodes_url <- NA
-  }
+  nodes_url <- ifelse(is.na(nodes_text), NA, nodes_url)
 
   # rules have no URLs when scraped from the chapter level
   if (selector == ".rule-number") {
