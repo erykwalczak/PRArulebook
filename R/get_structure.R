@@ -73,10 +73,6 @@ get_structure <- function(date, layer = "chapter") {
   ################
   ### SECTORS ###
   ##############
-  # cat("--- Scraping SECTORS ---")
-  # cat("\n")
-  # sectors <- scrape_menu(top_url, ".nav-child a")
-  # colnames(sectors) <- c("sector_name", "sector_url", "rulebook_url")
 
   if (layer == "sector") {
     sector_structure <- scrape_sector_structure(top_url)
@@ -96,20 +92,7 @@ get_structure <- function(date, layer = "chapter") {
   #################
   ### CHAPTERS ###
   ###############
-  # cat("--- Scraping CHAPTERS ---")
-  # cat("\n")
-  # chapters <- lapply(parts$part_url, scrape_menu, selector = ".Chapter a")
-  # chapters <- dplyr::bind_rows(chapters)
-  # colnames(chapters) <- c("chapter_name", "chapter_url", "part_url")
-  #
-  # # clean the chapter names
-  # chapters$chapter_name <- gsub("[\r\n]", " ", chapters$chapter_name)
-  # chapters$chapter_name <- trimws(gsub("\\s+", " ", chapters$chapter_name))
-  #
-  # # join chapters to parts and sectors
-  # chapters_parts_sectors <- dplyr::left_join(chapters, parts_sectors)
 
-  # TODO figure out return options. use lists to return everything ?
   if (layer == "chapter") {
     sector_structure <- scrape_sector_structure(top_url)
     part_structure <- scrape_part_structure(sector_structure)
@@ -117,13 +100,18 @@ get_structure <- function(date, layer = "chapter") {
     return(chapter_structure)
   }
 
+  ##############
+  ### RULES ###
+  ############
+
   if (layer == "rule") {
-    ##############
-    ### RULES ###
-    ############
+
+    # TODO turn into a function
+    # TODO skip NAs (how to return them in chapter df?), e.g. achapt$chapter_url[90:92]
 
     cat("--- Scraping RULES ---")
     cat("\n")
+    # TODO test map_df
     rules <- lapply(chapters$chapter_url, scrape_menu, selector = ".rule-number")
     rules <- dplyr::bind_rows(rules)
     # rename
@@ -138,25 +126,5 @@ get_structure <- function(date, layer = "chapter") {
   }
 
 }
-
-########## TEMP TESTS #########
-# # base_url <- "http://www.prarulebook.co.uk"
-
-#top_url <- paste0(base_url, "/rulebook/Home/", "Handbook", "/", "16-11-2007")
-#
-# chapters_list <- lapply(parts$part_url, scrape_menu, selector = ".Chapter a")
-# chapters_df <- bind_rows(chapters_list)
-
-
-# # temporary fix for 2007 handbook - missing URL from the chapters
-# handbook_2007_relevant <- readRDS("C:\\Users\\328254\\Desktop\\Code\\PRA_complexity_SWP\\handbook_2007_relevant.Rds")
-#
-# #
-# #handbook_2007_relevant$Part_url
-# missing_URLs <- lapply(handbook_2007_relevant$Part_url, scrape_menu, selector = ".Chapter a")
-# missing_df <- dplyr::bind_rows(missing_URLs)
-# #missing_df$text <- trimws(missing_df$text)
-# colnames(missing_df) <- c("Chapter_name", "Chapter_url", "Part_url")
-# saveRDS(missing_df, "handbook_2007_relevant_chapter_URLs_fixed.Rds")
 
 ### TODO fix rules > chapter JOIN - to remove duplicates
