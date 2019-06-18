@@ -1,6 +1,4 @@
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 # PRArulebook
 
 <!-- badges: start -->
@@ -12,7 +10,13 @@ status](https://www.r-pkg.org/badges/version/PRArulebook)](https://cran.r-projec
 <!-- badges: end -->
 
 The goal of PRArulebook is to scrape the Prudential Regulation Authority
-[rulebook](http://www.prarulebook.co.uk/)
+[rulebook](http://www.prarulebook.co.uk/).
+
+This package was developed while preparing a Staff Working Paper.
+
+**Citation**: Amadxarif, Z., Brookes, J., Garbarino, N., Patel, R.,
+Walczak, E. (2019) Textual Complexity in Prudential Regulation. Bank of
+England Staff Working Paper No. xxx.
 
 ## Installation
 
@@ -32,8 +36,15 @@ devtools::install_github("erzk/PRArulebook")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This package allows obtaining text and structure of the PRA rulebook
 
 ``` r
 library(PRArulebook)
 ```
+
+### Disclaimer
+
+This is an outcome of a research project and this is not an official BoE
+software. All errors are mine. The software and code samples are
+provided “as is” without warranty of any kind, either express or
+implied. Use at your own risk.
