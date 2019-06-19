@@ -19,6 +19,7 @@
 get_structure <- function(date, layer = "chapter") {
   # assign the error message
   date_error_message <- "Provide a correct date in dd-mm-yyyy format. From '01-01-2005' till today."
+  # TODO rename 'date'
 
   # check the arguments
   if (missing(date)) {
@@ -107,7 +108,7 @@ get_structure <- function(date, layer = "chapter") {
     sector_structure <- scrape_sector_structure(top_url)
     part_structure <- scrape_part_structure(sector_structure)
     chapter_structure <- scrape_chapter_structure(part_structure)
-    rule_structure <- scrape_rule_structure(chapter_structure)
+    rule_structure <- scrape_rule_structure(chapter_structure, date = date)
     return(rule_structure)
   }
 
