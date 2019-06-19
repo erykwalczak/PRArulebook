@@ -23,5 +23,6 @@ get_structure("16-11-2007")
 get_structure("16-11-2007", layer = "sector")
 get_structure("16-11-2007", layer = "part")
 get_structure("16-11-2007", layer = "chapter")
+get_structure("16-11-2007", layer = "rule")
 }
 }
