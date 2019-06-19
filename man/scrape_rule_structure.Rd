@@ -4,7 +4,7 @@
 \alias{scrape_rule_structure}
 \title{Scrape rule structure}
 \usage{
-scrape_rule_structure(df)
+scrape_rule_structure(df, date)
 }
 \arguments{
 \item{df}{Data frame with chapter URLs. Output of \code{"scrape_chapter_structure"}.}
@@ -20,6 +20,6 @@ Scrape rule structure
 sectors <- scrape_sector_structure("http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007")
 parts <- scrape_part_structure(sectors)
 chapters <- scrape_chapter_structure(parts)
-scrape_rule_structure(chapters)
+scrape_rule_structure(chapters, "16-11-2007")
 }
 }
