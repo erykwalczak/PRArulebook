@@ -26,6 +26,12 @@ scrape_chapter_structure <- function(df) {
   chapters$chapter_name <- gsub("[\r\n]", " ", chapters$chapter_name)
   chapters$chapter_name <- trimws(gsub("\\s+", " ", chapters$chapter_name))
 
+  # deleted chapters are still scraped - remove them
+  # e.g. comment out the filter line below to see NAs included
+  # chapters_test <- get_structure("16-11-2007", layer = "chapter")
+  # chapters_test$chapter_url[90:92]
+  chapters <- chapters %>% dplyr::filter(!is.na(chapter_url))
+
   # join chapters to parts and sectors
   chapters_parts_sectors <-
     dplyr::left_join(chapters, df, by = "part_url")
