@@ -44,7 +44,7 @@ get_content <- function(x, type = "text") {
 
     nodes_only_text <- pull_nodes(selector_text)
     nodes_text <- nodes_only_text %>% rvest::html_text()
-    #return(nodes_text)
+
     # TODO pull rule names/turn into df/clean
     # pull rules
     nodes_only_rule <- pull_nodes(selector_rule)
@@ -82,7 +82,25 @@ get_content <- function(x, type = "text") {
                            link_link = nodes_links,
                            url = x,
                            stringsAsFactors = FALSE)
-    # TODO add the full URL to link_link if starts with /rulebook/
+
+    ### assign link type - used in cleaning the links (network_cleaning.R)
+    assign_link_type <- function(x) {
+      ifelse(grepl("Content/Part", x), "Part",
+             ifelse(grepl("Content/Chapter", x), "Chapter",
+                    ifelse(grepl("Content/Rule", x), "Rule",
+                           ifelse(grepl("Content/Sector", x), "Sector",
+                                  ifelse(grepl("LegalInstrument", x), "Legal",
+                                         ifelse(grepl("/Glossary", x), "Glossary",
+                                                "Other"))))))
+    }
+    # run the link type assignment
+    links_df$link_type <- assign_link_type(links_df$link_link)
+
+    # return data frame with links
     return(links_df)
   }
 }
+
+############## test
+# scrape PRIN 1
+#chapter_content_prin1 <- get_content("http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007")
