@@ -3,8 +3,8 @@
 #' Scrapes names and URLs from the PRA rulebook menu. The menu is on the left-hand side of the rulebook website.
 #'
 #' @param url Full URL to scrape
-#' @param selector CSS selector to scrape. Use Chrome with SelectorGadget to find the relevant selector.
-#' @param structure_type Type of structure to scrape: text, url, both.
+#' @param selector String. CSS selector to scrape. Use Chrome with SelectorGadget to find the relevant selector.
+#' @param date String. Optional date. Needed only for rule ID scraping.
 #'
 #' @return Data frame with text, url, or both.
 #' @export
@@ -13,8 +13,9 @@
 #' \dontrun{
 #' scrape_menu("http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", ".nav-child a")
 #' scrape_menu("http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", ".nav-child a", "text")
+#' scrape_menu("http://www.prarulebook.co.uk/rulebook/Content/Chapter/242047/16-11-2007", "a", date = "16-11-2007")
 #' }
-scrape_menu <- function(url, selector, structure_type = "both") {
+scrape_menu <- function(url, selector, date) {
 
   # TODO add to onLoad
   base_url <- "http://www.prarulebook.co.uk"
@@ -57,18 +58,66 @@ scrape_menu <- function(url, selector, structure_type = "both") {
                          provided_url = rep(url, length(nodes_text)),
                          stringsAsFactors = FALSE)
 
-  # TODO rename nodes_df columns if one of the selectors used
+  # scrape rule IDs and create URLs from them
+  if (selector == "a") {
+    IDs <- nodes_only %>% rvest::html_attr("id")
+    # keep only those with numbers
+    # TODO fix warning - suppressMessages() didn't work
+    # .Warning message:
+    # In scrape_menu(URL, : NAs introduced by coercion
+    IDs <- as.numeric(gsub("([0-9]+).*$", "\\1", IDs))
+    IDs <- IDs[!is.na(IDs)]
+    # turn into string to count the characters
+    # IDs have 6 characters
+    IDs <- as.character(IDs)
+    IDs <- ifelse(nchar(IDs) == 6, IDs, NA)
 
-  if (structure_type == "both") {
-    return(nodes_df)
+    # create actual URLs
+    rule_urls <-
+      paste0("http://www.prarulebook.co.uk/rulebook/Content/Rule/",
+             IDs,
+             "/",
+             date,
+             "#",
+             IDs)
+
+    # create selectors for rules
+    rule_no_selector <-
+      paste0("#", IDs, "+ .div-row .rule-number")
+    rule_text_selector <-
+      paste0("#", IDs, "+ .div-row .col3")
+
+    # # pull content
+    # TODO turn into a function and map
+    # rule_number <-
+    #   httr::GET(rule_urls) %>%
+    #   xml2::read_html() %>%
+    #   rvest::html_nodes(rule_no_selector) %>%
+    #   rvest::html_text()
+    #
+    # rule_text <-
+    #   httr::GET(rule_urls) %>%
+    #   xml2::read_html() %>%
+    #   rvest::html_nodes(rule_text_selector) %>%
+    #   rvest::html_text()
+
+    # httr::GET("http://www.prarulebook.co.uk/rulebook/Content/Rule/242070/16-11-2007#242070") %>%
+    #   xml2::read_html() %>% html_nodes("#242070+ .div-row .col3 p") %>% html_text()
+
+    # make a df with rule URLs and add IDs
+    rule_IDs <-
+      data.frame(rule_url = rule_urls,
+                 rule_id = IDs,
+                 rule_number = rule_no_selector,
+                 rule_text = rule_text_selector,
+                 chapter_url = url,
+                 stringsAsFactors = FALSE)
+
+    # assign the IDs
+    nodes_df <- rule_IDs
   }
 
-  if (structure_type == "text") {
-    return(nodes_text)
-  }
-
-  if (structure_type == "url") {
-    return(nodes_url)
-  }
+  # TODO rename nodes_df columns if one of the selectors used ?
+  return(nodes_df)
 
 }
