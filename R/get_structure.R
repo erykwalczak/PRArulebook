@@ -14,6 +14,7 @@
 #' get_structure("16-11-2007", layer = "sector")
 #' get_structure("16-11-2007", layer = "part")
 #' get_structure("16-11-2007", layer = "chapter")
+#' get_structure("16-11-2007", layer = "rule")
 #' }
 get_structure <- function(date, layer = "chapter") {
   # assign the error message
@@ -103,26 +104,11 @@ get_structure <- function(date, layer = "chapter") {
   ############
 
   if (layer == "rule") {
-
-    # TODO turn into a function
-    # TODO skip NAs (how to return them in chapter df?), e.g. achapt$chapter_url[90:92]
-
-    cat("--- Scraping RULES ---")
-    cat("\n")
-    # TODO test map_df
-    rules <- lapply(chapters$chapter_url, scrape_menu, selector = ".rule-number")
-    rules <- dplyr::bind_rows(rules)
-    # rename
-    colnames(rules) <- c("rule_name", "rule_url", "chapter_url")
-
-    # join chapters to parts and sectors
-    # TODO find why duplicated created in 2007
-    # TODO join on chapter URL !!! not name
-    rules_chapters_parts_sectors <- dplyr::left_join(rules, chapters_parts_sectors)
-
-    return(rules)
+    sector_structure <- scrape_sector_structure(top_url)
+    part_structure <- scrape_part_structure(sector_structure)
+    chapter_structure <- scrape_chapter_structure(part_structure)
+    rule_structure <- scrape_rule_structure(chapter_structure)
+    return(rule_structure)
   }
 
 }
-
-### TODO fix rules > chapter JOIN - to remove duplicates
