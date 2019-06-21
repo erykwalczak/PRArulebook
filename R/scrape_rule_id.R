@@ -23,19 +23,22 @@ scrape_rule_id <- function(rule_urls, type = "text") {
   # pull text
   if (type == "text") {
 
-  cat(".")
+    cat(".")
 
-  rule_urls$rule_number <-
-    rules_html %>%
-    rvest::html_nodes(rule_urls[["rule_number_sel"]]) %>%
-    rvest::html_text()
+    # TODO add tryCatch - otherwise fails on rules12[2,]
+    rule_urls$rule_number <-
+      rules_html %>%
+      rvest::html_nodes(rule_urls[["rule_number_sel"]]) %>%
+      rvest::html_text() %>%
+      {ifelse(length(.) == 0, NA, .)}
 
-  rule_urls$rule_text <-
-    rules_html %>%
-    rvest::html_nodes(rule_urls[["rule_text_sel"]]) %>%
-    rvest::html_text()
+    rule_urls$rule_text <-
+      rules_html %>%
+      rvest::html_nodes(rule_urls[["rule_text_sel"]]) %>%
+      rvest::html_text() %>%
+      {ifelse(length(.) == 0, NA, .)}
 
-  return(rule_urls)
+    return(rule_urls)
 
   }
 
@@ -54,8 +57,4 @@ scrape_rule_id <- function(rule_urls, type = "text") {
   ## works with: .col1, .col3, .rule-label, .rule-number, .effective-date
 }
 
-###
-## works on single url
-#rules12_new <- scrape_rule_id(rules12[1,])
-## TODO fix vectorization - see scrape_menu
-#rules12_new_all <- purrr::map_df(rules12, scrape_rule_id)
+
