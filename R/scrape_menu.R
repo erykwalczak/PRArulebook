@@ -108,8 +108,8 @@ scrape_menu <- function(url, selector, date) {
     rule_IDs <-
       data.frame(rule_url = rule_urls,
                  rule_id = IDs,
-                 rule_number = rule_no_selector,
-                 rule_text = rule_text_selector,
+                 rule_number_sel = rule_no_selector,
+                 rule_text_sel = rule_text_selector,
                  chapter_url = url,
                  stringsAsFactors = FALSE)
 
