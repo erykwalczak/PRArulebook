@@ -1,6 +1,8 @@
 #' Scrape rule ID
 #'
 #' @param rule_urls Data frame with rule url. Output of \code{"scrape_rule_structure"}.
+#' @param selector_rule_no Rule number CSS selector
+#' @param selector_rule_text Rule text CSS selector
 #' @param type String. Type of data to scrape: text or links.
 #'
 #' @return Data frame with rule text and links.
@@ -10,14 +12,14 @@
 #' \dontrun{
 #' chapters_df <- get_structure("16-11-2007", layer = "chapter")
 #' rules12 <- scrape_rule_structure(chapters_df[1:2,], "16-11-2007")
-#' scrape_rule_id(rules12[1,])
+#' scrape_rule_id(rules12$rule_url[1], rules12$rule_number_sel[1], rules12$rule_text_sel[1])
 #' }
-scrape_rule_id <- function(rule_urls, type = "text") {
+scrape_rule_id <- function(url, selector_rule_no, selector_rule_text, type = "text") {
 
   # TODO check if ruleURL provided
 
   rules_html <-
-    httr::GET(rule_urls[["rule_url"]]) %>%
+    httr::GET(url) %>%
     xml2::read_html()
 
   # pull text
@@ -26,19 +28,25 @@ scrape_rule_id <- function(rule_urls, type = "text") {
     cat(".")
 
     # TODO add tryCatch - otherwise fails on rules12[2,]
-    rule_urls$rule_number <-
+    rule_number_content <-
       rules_html %>%
-      rvest::html_nodes(rule_urls[["rule_number_sel"]]) %>%
+      rvest::html_nodes(selector_rule_no) %>%
       rvest::html_text() %>%
       {ifelse(length(.) == 0, NA, .)}
 
-    rule_urls$rule_text <-
+    rule_text_content <-
       rules_html %>%
-      rvest::html_nodes(rule_urls[["rule_text_sel"]]) %>%
+      rvest::html_nodes(selector_rule_text) %>%
       rvest::html_text() %>%
       {ifelse(length(.) == 0, NA, .)}
 
-    return(rule_urls)
+    rules_content <-
+      data.frame(rule_number = rule_number_content,
+                 rule_text = rule_text_content,
+                 rule_url = url,
+                 stringsAsFactors = FALSE
+                 )
+    return(rules_content)
 
   }
 
