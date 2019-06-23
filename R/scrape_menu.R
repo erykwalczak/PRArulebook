@@ -60,34 +60,49 @@ scrape_menu <- function(url, selector, date) {
 
   # scrape rule IDs and create URLs from them
   if (selector == "a") {
-    IDs <- nodes_only %>% rvest::html_attr("id")
-    # keep only those with numbers
-    # TODO fix warning - suppressMessages() didn't work
-    # .Warning message:
-    # In scrape_menu(URL, : NAs introduced by coercion
-    IDs <- as.numeric(gsub("([0-9]+).*$", "\\1", IDs))
-    IDs <- IDs[!is.na(IDs)]
-    # turn into string to count the characters
-    # IDs have 6 characters
-    IDs <- as.character(IDs)
-    IDs <- ifelse(nchar(IDs) == 6, IDs, NA)
+    IDs <- nodes_only %>% rvest::html_attr("id") %>% na.omit()
 
-    # create actual URLs
-    rule_urls <-
-      paste0("http://www.prarulebook.co.uk/rulebook/Content/Rule/",
-             IDs,
-             "/",
-             date,
-             "#",
-             IDs)
+    # test if empty
+    # e.g. http://www.prarulebook.co.uk/rulebook/Content/Chapter/302933/16-11-2017
 
-    # create selectors for rules
-    rule_no_selector <-
-      paste0("#", IDs, "+ .div-row .rule-number")
-    rule_text_selector <-
-      paste0("#", IDs, "+ .div-row .col3")
-    rule_link_selector <-
-      paste0("#", IDs, "+ .div-row a")
+    if (length(IDs) > 0) {
+      # keep only those with numbers
+      # TODO fix warning - suppressMessages() didn't work
+      # .Warning message:
+      # In scrape_menu(URL, : NAs introduced by coercion
+      IDs <- as.numeric(gsub("([0-9]+).*$", "\\1", IDs))
+      IDs <- IDs[!is.na(IDs)]
+      # turn into string to count the characters
+      # IDs have 6 characters
+      IDs <- as.character(IDs)
+      IDs <- ifelse(nchar(IDs) == 6, IDs, NA)
+
+      # create actual URLs
+      rule_urls <-
+        paste0("http://www.prarulebook.co.uk/rulebook/Content/Rule/",
+               IDs,
+               "/",
+               date,
+               "#",
+               IDs)
+
+      # create selectors for rules
+      rule_no_selector <-
+        paste0("#", IDs, "+ .div-row .rule-number")
+      rule_text_selector <-
+        paste0("#", IDs, "+ .div-row .col3")
+      rule_link_selector <-
+        paste0("#", IDs, "+ .div-row a")
+
+    } else {
+
+      IDs <- NA
+      rule_urls <- NA
+      rule_no_selector <- NA
+      rule_text_selector <- NA
+      rule_link_selector <- NA
+
+    }
 
     # # pull content
     # TODO turn into a function and map
