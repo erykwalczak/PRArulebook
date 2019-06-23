@@ -4,7 +4,7 @@
 #'
 #' @param x String. URL to scrape.
 #' @param type String. Type of information to scrape. "Text" or "links".
-#' @param selector_to_links String. Optional. CSS selector for individual rules.
+#' @param single_rule_selector String. Optional. CSS selector for individual rules.
 #'
 #' @return Data frame with URLs and corresponding text.
 #' @export
@@ -13,8 +13,10 @@
 #' \dontrun{
 #' get_content("http://www.prarulebook.co.uk/rulebook/Content/Chapter/242047/16-11-2007")
 #' get_content("http://www.prarulebook.co.uk/rulebook/Content/Chapter/242047/16-11-2007", "links")
+#' get_content("http://www.prarulebook.co.uk/rulebook/Content/Rule/216149/16-11-2007#216149",
+#' "links", "yes")
 #' }
-get_content <- function(x, type = "text", selector_to_links = NULL) {
+get_content <- function(x, type = "text", single_rule_selector = NULL) {
 
   if (!startsWith(x, "http")) { # or WWW / prarulebook.co.uk
     stop("Provide a valid URL.")
@@ -27,8 +29,18 @@ get_content <- function(x, type = "text", selector_to_links = NULL) {
   selector_rule <- ".col1"
   selector_text <- ".col3"
   # rules require specific selector
-  selector_links <-
-    ifelse(is.null(selector_to_links), ".col3 a", selector_to_links)
+  if (is.null(single_rule_selector)) {
+    selector_links <- ".col3 a"
+  }
+
+  if (single_rule_selector == "yes") {
+    # get the rule ID
+    # TODO write a more robust regex
+    rule_id <- stringr::str_sub(x, start = -6)
+    # create the selector
+    selector_links <- paste0("#", rule_id, "+ .div-row a")
+  }
+
 
   # TODO return NA when selectors are not present
 
@@ -76,15 +88,28 @@ get_content <- function(x, type = "text", selector_to_links = NULL) {
   # pull links
   if (type == "links") {
 
+    # display
+    cat(".")
+    cat("\n")
+
     # extract the links
     nodes_only_links <- pull_nodes(selector_links)
-    nodes_links_text <- nodes_only_links %>% rvest::html_text()
-    nodes_links <- nodes_only_links %>% rvest::html_attr("href")
+
+    # assign NAs if there are no links
+    if (length(nodes_only_links) == 0) {
+      nodes_links_text <- NA
+      nodes_links <- NA
+    }
+
+    if (length(nodes_only_links) != 0) {
+      nodes_links_text <- nodes_only_links %>% rvest::html_text()
+      nodes_links <- nodes_only_links %>% rvest::html_attr("href")
+    }
 
     # turn into a DF
     # checks are added to deal with empty XML (nodes_only_links)
-    links_df <- data.frame(link_text = nodes_links_text %>% {ifelse(length(.) == 0, NA, .)},
-                           link_link = nodes_links %>% {ifelse(length(.) == 0, NA, .)},
+    links_df <- data.frame(link_text = nodes_links_text,
+                           link_link = nodes_links,
                            url = x,
                            stringsAsFactors = FALSE)
 
