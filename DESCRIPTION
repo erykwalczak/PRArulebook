@@ -17,5 +17,6 @@ Imports:
     rvest,
     httr,
     lubridate,
-    magrittr
+    magrittr,
+    stringr
 RoxygenNote: 6.1.1
