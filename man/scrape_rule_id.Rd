@@ -25,6 +25,6 @@ Scrape rule ID
 \dontrun{
 chapters_df <- get_structure("16-11-2007", layer = "chapter")
 rules12 <- scrape_rule_structure(chapters_df[1:2,], "16-11-2007")
-scrape_rule_id(rules12[1,])
+scrape_rule_id(rules12$rule_url[1], rules12$rule_number_sel[1], rules12$rule_text_sel[1])
 }
 }
