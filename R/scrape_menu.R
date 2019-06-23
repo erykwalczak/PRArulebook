@@ -86,6 +86,8 @@ scrape_menu <- function(url, selector, date) {
       paste0("#", IDs, "+ .div-row .rule-number")
     rule_text_selector <-
       paste0("#", IDs, "+ .div-row .col3")
+    rule_link_selector <-
+      paste0("#", IDs, "+ .div-row .a")
 
     # # pull content
     # TODO turn into a function and map
@@ -110,6 +112,7 @@ scrape_menu <- function(url, selector, date) {
                  rule_id = IDs,
                  rule_number_sel = rule_no_selector,
                  rule_text_sel = rule_text_selector,
+                 rule_link_sel = rule_link_selector,
                  chapter_url = url,
                  stringsAsFactors = FALSE)
 
