@@ -16,7 +16,9 @@
 #' }
 scrape_rule_id <- function(url, selector_rule_no, selector_rule_text, type = "text") {
 
-  # TODO check if ruleURL provided
+  if (!startsWith(url, "http")) { # or WWW / prarulebook.co.uk
+    stop("Provide a valid URL.")
+  }
 
   rules_html <-
     httr::GET(url) %>%
