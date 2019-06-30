@@ -4,14 +4,12 @@
 \alias{scrape_rule_id}
 \title{Scrape rule ID}
 \usage{
-scrape_rule_id(url, selector_rule_no, selector_rule_text, type = "text")
+scrape_rule_id(url, selector_rule_no, selector_rule_text)
 }
 \arguments{
 \item{selector_rule_no}{Rule number CSS selector}
 
 \item{selector_rule_text}{Rule text CSS selector}
-
-\item{type}{String. Type of data to scrape: text or links.}
 
 \item{rule_urls}{Data frame with rule url. Output of \code{"scrape_rule_structure"}.}
 }
