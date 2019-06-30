@@ -15,6 +15,16 @@
 #' }
 scrape_rule_id <- function(url, selector_rule_no, selector_rule_text) {
 
+  if (is.na(url)) {
+    rules_content <-
+      data.frame(rule_number = NA,
+                 rule_text = NA,
+                 rule_url = url,
+                 stringsAsFactors = FALSE
+      )
+    return(rules_content)
+  }
+
   rules_html <-
     httr::GET(url) %>%
     xml2::read_html()
