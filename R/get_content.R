@@ -153,10 +153,19 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
     links_df$to_type <- assign_link_type(links_df$to)
 
     # clean the links - append "http:" if it's a rulebook url
-    links_df$to <-
-      ifelse(startsWith(links_df$to, "/rulebook/"),
-             paste0("http://www.prarulebook.co.uk", links_df$to),
-             links_df$to)
+    clean_to_link <- function(url_to_clean) {
+      cleaned_url <-
+        ifelse(startsWith(url_to_clean, "/rulebook/"),
+               paste0("http://www.prarulebook.co.uk", url_to_clean),
+               url_to_clean)
+      return(cleaned_url)
+    }
+
+    # apply the cleaning function only on non-NA url
+    links_df$to <- ifelse(is.na(links_df$to),
+                          links_df$to,
+                          clean_to_link(links_df$to))
+
 
     # return data frame with links
     return(links_df)
