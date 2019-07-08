@@ -68,6 +68,8 @@ layers and each of them can be passed to the `layer` argument of
 
 ### Content
 
+#### Text
+
 To get content of the rulebook (text or links) use `get_content`
 function a URL of a given chapter/part/sector. This function can be
 applied on the entire rulebook in the following way
@@ -77,13 +79,29 @@ applied on the entire rulebook in the following way
 parts_text <-
   purrr::map_df(parts$part_url,
                 get_content)
+```
 
+#### Network
+
+``` r
 # scrape links
 parts_links <-
   purrr::map_df(parts$part_url,
                 get_content,
                 "links")
 ```
+
+Which will return a data frame with *from/to url*, *text* used in a
+link, and a *type* of a link.
+
+This
+[page](http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007)
+with extracted links (edges) will return the following
+
+![](parts_links.png)
+
+Scraped data containing information about the links can be used for
+network analysis (warning: further cleaning is required).
 
 ### Rule-level data
 
