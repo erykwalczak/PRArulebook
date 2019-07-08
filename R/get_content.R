@@ -33,14 +33,13 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
     selector_links <- ".col3 a"
   }
 
-  if (single_rule_selector == "yes") {
+  if (!is.null(single_rule_selector) && single_rule_selector == "yes") {
     # get the rule ID
     # TODO write a more robust regex
     rule_id <- stringr::str_sub(x, start = -6)
     # create the selector
     selector_links <- paste0("#", rule_id, "+ .div-row a")
   }
-
 
   # TODO return NA when selectors are not present
 
@@ -58,6 +57,11 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
   if (type == "text") {
     # works on a chapter level
 
+    # display
+    cat(".")
+    cat("\n")
+
+    # scrape
     nodes_only_text <- pull_nodes(selector_text)
     nodes_text <- nodes_only_text %>% rvest::html_text()
 
@@ -65,23 +69,35 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
     # pull rules
     nodes_only_rule <- pull_nodes(selector_rule)
     nodes_rule <- nodes_only_rule %>% rvest::html_text()
-    nodes_rule <- nodes_rule[-1] # remove the first one to equalise the length of text and rules
+    # remove the first element to equalise the length of text and rules
+    nodes_rule <- nodes_rule[-1]
 
-    if (length(nodes_text) == length(nodes_rule)) {
-      rule_text_df <- data.frame(rule_rule = nodes_rule,
-                                 rule_text = nodes_text,
-                                 url = x,
-                                 stringsAsFactors = FALSE)
-      # TODO clean rule_text_df - remove blanks /n etc
+    # check if content is available, i.e. chapter/part was effective
+    if (length(nodes_only_text) > 0) {
 
-      # deleted rules
-      # e.g. MAR 4.1.3 http://www.prarulebook.co.uk/rulebook/Content/Chapter/242047/16-11-2007#242057
-      rule_text_df$active <- !stringr::str_detect(rule_text_df$rule_rule, "Inactive date")
+      if (length(nodes_text) == length(nodes_rule)) {
 
-      # TODO split rule into date rule etc.
+        rule_text_df <-
+          data.frame(rule_number = trimws(nodes_rule),
+                     rule_text = trimws(nodes_text),
+                     url = x,
+                     stringsAsFactors = FALSE)
+        # TODO clean rule_text_df
+
+        # deleted rules
+        # e.g. MAR 4.1.3 http://www.prarulebook.co.uk/rulebook/Content/Chapter/242047/16-11-2007#242057
+        rule_text_df$active <- !stringr::str_detect(rule_text_df$rule_number, "Inactive date")
+
+        # TODO split rule into date rule etc.
+        return(rule_text_df)
+
+        # TODO when NA or unequal return a list?
+      }
+    } else {
+      rule_text_df <- data.frame(rule_number = NA,
+                                 rule_text = NA,
+                                 url = x)
       return(rule_text_df)
-
-      # TODO when NA or unequal return a list?
     }
   }
 
@@ -97,20 +113,29 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
 
     # assign NAs if there are no links
     if (length(nodes_only_links) == 0) {
+
       nodes_links_text <- NA
       nodes_links <- NA
+
     }
 
     if (length(nodes_only_links) != 0) {
-      nodes_links_text <- nodes_only_links %>% rvest::html_text()
-      nodes_links <- nodes_only_links %>% rvest::html_attr("href")
+
+      nodes_links_text <-
+        nodes_only_links %>%
+        rvest::html_text() %>%
+        trimws()
+
+      nodes_links <-
+        nodes_only_links %>%
+        rvest::html_attr("href")
     }
 
     # turn into a DF
     # checks are added to deal with empty XML (nodes_only_links)
-    links_df <- data.frame(link_text = nodes_links_text,
-                           link_link = nodes_links,
-                           url = x,
+    links_df <- data.frame(from = x,
+                           to = nodes_links,
+                           to_text = nodes_links_text,
                            stringsAsFactors = FALSE)
 
     ### assign link type - used in cleaning the links (network_cleaning.R)
@@ -125,7 +150,13 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
                                                 "Other")))))))
     }
     # run the link type assignment
-    links_df$link_type <- assign_link_type(links_df$link_link)
+    links_df$to_type <- assign_link_type(links_df$to)
+
+    # clean the links - append "http:" if it's a rulebook url
+    links_df$to <-
+      ifelse(startsWith(links_df$to, "/rulebook/"),
+             paste0("http://www.prarulebook.co.uk", links_df$to),
+             links_df$to)
 
     # return data frame with links
     return(links_df)
