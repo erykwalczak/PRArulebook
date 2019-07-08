@@ -30,7 +30,7 @@ You can install the development version of `PRArulebook` from
 devtools::install_github("erzk/PRArulebook")
 ```
 
-## Example
+## Examples
 
 Load the package
 
@@ -38,11 +38,20 @@ Load the package
 library(PRArulebook)
 ```
 
+### Structure
+
 The simplest way to extract a rulebook structure is to use
 `get_structure` function
 
 ``` r
-get_structure("18-06-2019", layer = "rule")
+# get the structure of the rulebook down to the part-level
+parts <-
+  get_structure("16-11-2007",
+                layer = "part")
+# or rule-level (without rule-level URLs)
+rules <-
+  get_structure("18-06-2019",
+                layer = "rule")
 ```
 
 This will start scraping the PRA rulebook. Pulling data will take longer
@@ -57,13 +66,42 @@ layers and each of them can be passed to the `layer` argument of
 
 ![](get_structure_demo.gif)
 
-To get a structure of a rulebook at a given date use the following. The
-first command pull the structure on the chapter-level. The second
-command extracts rule-IDs.
+### Content
+
+To get content of the rulebook (text or links) use `get_content`
+function a URL of a given chapter/part/sector. This function can be
+applied on the entire rulebook in the following way
 
 ``` r
-chapters_df <- get_structure("16-11-2007", layer = "chapter")
-rules_df <- scrape_rule_structure(chapters_df, "16-11-2007")
+# scrape text
+parts_text <-
+  purrr::map_df(parts$part_url,
+                get_content)
+
+# scrape links
+parts_links <-
+  purrr::map_df(parts$part_url,
+                get_content,
+                "links")
+```
+
+### Rule-level data
+
+Things get a bit more complicated when you need **rules and their
+corresponding URLs**. This requires digging through the code on the
+chapter-level and then visiting each rule separately so it is **much
+slower** than the previous method.
+
+The first command extracts the structure on the chapter-level. The
+second command extracts rule-IDs.
+
+``` r
+chapters_df <-
+  get_structure("16-11-2007",
+                layer = "chapter")
+rules_df <-
+  scrape_rule_structure(chapters_df,
+                        date = "16-11-2007")
 ```
 
 This will generate a data frame with rule-level structure. The next step
