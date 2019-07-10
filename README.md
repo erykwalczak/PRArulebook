@@ -4,9 +4,11 @@
 <!-- badges: start -->
 
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/PRArulebook)](https://cran.r-project.org/package=PRArulebook)
+[![Travis build
+status](https://travis-ci.org/erzk/PRArulebook.svg?branch=master)](https://travis-ci.org/erzk/PRArulebook)
 <!-- badges: end -->
 
 The goal of `PRArulebook` is to scrape the Prudential Regulation
