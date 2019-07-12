@@ -104,23 +104,6 @@ scrape_menu <- function(url, selector, date) {
 
     }
 
-    # # pull content
-    # TODO turn into a function and map
-    # rule_number <-
-    #   httr::GET(rule_urls) %>%
-    #   xml2::read_html() %>%
-    #   rvest::html_nodes(rule_no_selector) %>%
-    #   rvest::html_text()
-    #
-    # rule_text <-
-    #   httr::GET(rule_urls) %>%
-    #   xml2::read_html() %>%
-    #   rvest::html_nodes(rule_text_selector) %>%
-    #   rvest::html_text()
-
-    # httr::GET("http://www.prarulebook.co.uk/rulebook/Content/Rule/242070/16-11-2007#242070") %>%
-    #   xml2::read_html() %>% html_nodes("#242070+ .div-row .col3 p") %>% html_text()
-
     # make a df with rule URLs and add IDs
     rule_IDs <-
       data.frame(rule_url = rule_urls,
