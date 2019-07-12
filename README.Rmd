@@ -15,7 +15,6 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![CRAN status](https://www.r-pkg.org/badges/version/PRArulebook)](https://cran.r-project.org/package=PRArulebook)
-[![Travis build status](https://travis-ci.org/erzk/PRArulebook.svg?branch=master)](https://travis-ci.org/erzk/PRArulebook)
 <!-- badges: end -->
 
 The goal of `PRArulebook` is to scrape the Prudential Regulation Authority [Rulebook](http://www.prarulebook.co.uk/) to obtain its text and structure.
@@ -77,17 +76,43 @@ parts_text <-
                 get_content)
 ```
 
-#### Network
+There is another, even faster way, to acquire this data by scraping the website in parallel using [furrr](https://cran.r-project.org/web/packages/furrr/). In this example it took 153 sec to run the scraper in parallel vs. 249 sec using `purrr`.
 
 ```{r, eval = FALSE}
-# scrape links
+library(furrr)
+library(future)
+library(dplyr)
+
+future::plan(multiprocess)
+
+parts_text <-
+  furrr::future_map_dfr(parts$part_url,
+                        get_content,
+                        .progress = TRUE)
+```
+
+#### Network
+
+To scrape the links and create data set for network analysis `get_content` function can be used but with a `type` argument set to `"link"`. Like in the previous example, this call can also be parallelised.
+
+```{r, eval = FALSE}
+# sequential
 parts_links <-
   purrr::map_df(parts$part_url,
                 get_content,
                 "links")
+
+# parallel (faster)
+future::plan(multiprocess)
+
+parts_links <-
+  furrr::future_map_dfr(parts$part_url,
+                        get_content,
+                        "links",
+                        .progress = TRUE)
 ```
 
-Which will return a data frame with *from/to url*, *text* used in a link, and a *type* of a link.
+The code above will return a data frame with *from/to url*, *text* used in a link, and a *type* of a link.
 
 This [page](http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007) with extracted links (edges) will return the following
 
@@ -105,6 +130,7 @@ The first command extracts the structure on the chapter-level. The second comman
 chapters_df <-
   get_structure("16-11-2007",
                 layer = "chapter")
+
 rules_df <-
   scrape_rule_structure(chapters_df,
                         date = "16-11-2007")
