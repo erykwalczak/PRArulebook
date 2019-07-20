@@ -3,6 +3,7 @@
 export("%>%")
 export(get_content)
 export(get_structure)
+export(recode_layer)
 export(scrape_chapter_structure)
 export(scrape_menu)
 export(scrape_part_structure)
