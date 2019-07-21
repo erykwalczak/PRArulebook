@@ -15,6 +15,13 @@
 #' }
 recode_layer <- function(from, to = "all", structure_file) {
 
+  # validate to type
+  if (!(to %in% c("rule_url", "rule_name", "chapter_url", "chapter_name",
+  "part_url", "part_name", "sector_url", "sector_name", "all"))) {
+    stop("Provide correct 'to' argument. Available options: rule_url, rule_name,
+         chapter_url, chapter_name, part_url, part_name, sector_url, sector_name, all.")
+  }
+
   assign_link_type <- function(x) {
     ifelse(is.na(x), NA,
            ifelse(grepl("Content/Part", x), "Part",
@@ -26,7 +33,9 @@ recode_layer <- function(from, to = "all", structure_file) {
                                                      "Other")))))))
   }
 
+  # check the type of link
   from_type <- assign_link_type(from)
+  # assign appropriate variable name
   from_type_url <- ifelse(from_type == "Sector", "sector_url",
                           ifelse(from_type == "Part", "part_url",
                                  ifelse(from_type == "Chapter", "chapter_url",
@@ -34,6 +43,7 @@ recode_layer <- function(from, to = "all", structure_file) {
                                                stop("Incorrect URL")))))
 
   from_df <- data.frame(from, stringsAsFactors = FALSE)
+  # rename the column to match the structure file
   colnames(from_df) <- from_type_url
 
   # or find in data.frame if faster ???
@@ -42,9 +52,8 @@ recode_layer <- function(from, to = "all", structure_file) {
     joined_layers <-
       dplyr::left_join(from_df, structure_file)
   } else {
-    to_column <- "sector_url"
     joined_layers <-
-      dplyr::left_join(from, structure_file[[c(from_column, to_column)]])
+      dplyr::left_join(from, structure_file[[c(from_type_url, to)]])
   }
 
   return(joined_layers)
