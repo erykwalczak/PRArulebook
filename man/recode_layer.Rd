@@ -9,7 +9,8 @@ recode_layer(from, to = "all", structure_file)
 \arguments{
 \item{from}{Source layer. Rule, chapter, part, sector.}
 
-\item{to}{Target layer. Rule, chapter, part, sector.}
+\item{to}{Target layer. Available options: rule_url, rule_name,
+chapter_url, chapter_name, part_url, part_name, sector_url, sector_name, all}
 
 \item{structure_file}{Data frame. Output of \code{"get_structure"}.}
 }
@@ -22,7 +23,10 @@ Recode layer of the rulebook
 \examples{
 \dontrun{
 rulebook_structure <- get_structure("16-11-2017")
+
 recode_layer("http://www.prarulebook.co.uk/rulebook/Content/Chapter/211140/16-11-2017",
 to = "all", structure_file = rulebook_structure)
+
+recode_layer(rulebook_structure$part_url[2], "part_name", rulebook_structure)
 }
 }
