@@ -18,5 +18,7 @@ Imports:
     httr,
     lubridate,
     magrittr,
-    stringr
+    stringr,
+    future,
+    furrr
 RoxygenNote: 6.1.1
