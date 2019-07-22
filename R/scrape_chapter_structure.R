@@ -9,17 +9,22 @@
 #' \dontrun{
 #' sectors <- scrape_sector_structure("http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007")
 #' parts <- scrape_part_structure(sectors)
-#' scrape_chapter_structure(parts)
+#' chapters <- scrape_chapter_structure(parts)
 #' }
 scrape_chapter_structure <- function(df) {
   cat("\n")
   cat("--- Scraping CHAPTERS ---")
   cat("\n")
+
+  # start multicore processing
+  future::plan(multiprocess)
+
   # get all chapters and append to a data frame
   chapters <-
-    purrr::map_df(df[["part_url"]],
-                  scrape_menu, selector = ".Chapter a")
-
+    furrr::future_map_dfr(df$part_url,
+                  scrape_menu, selector = ".Chapter a",
+                  .progress = TRUE)
+  # rename columns
   colnames(chapters) <- c("chapter_name", "chapter_url", "part_url")
 
   # clean the chapter names
@@ -30,7 +35,8 @@ scrape_chapter_structure <- function(df) {
   # e.g. comment out the filter line below to see NAs included
   # chapters_test <- get_structure("16-11-2007", layer = "chapter")
   # chapters_test$chapter_url[90:92]
-  chapters <- chapters %>% dplyr::filter(!is.na(chapter_url))
+  chapters <-
+    chapters %>% dplyr::filter(!is.na(chapter_url))
 
   # join chapters to parts and sectors
   chapters_parts_sectors <-
