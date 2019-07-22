@@ -19,3 +19,38 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(PRArulebook)
 ```
+
+Get the structure:
+
+```{r}
+sectors <- scrape_sector_structure("http://www.prarulebook.co.uk/rulebook/Home/Handbook/22-03-2006")
+parts <- scrape_part_structure(sectors)
+```
+
+This is quite large so only small parts were scraped.
+
+See what was scraped:
+
+```{r}
+dplyr::glimpse(parts)
+```
+
+
+Visualise the structure:
+
+```{r}
+library(collapsibleTree)
+
+Handbook <- parts
+
+collapsibleTree(
+  Handbook,
+  hierarchy = c("sector_name", "part_name"),
+  width = 800,
+  height = 1100,
+  zoomable = FALSE,
+  collapsed = FALSE
+)
+```
+
+
