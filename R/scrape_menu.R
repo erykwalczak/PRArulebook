@@ -20,9 +20,6 @@ scrape_menu <- function(url, selector, date) {
   # TODO add to onLoad
   base_url <- "http://www.prarulebook.co.uk"
 
-  # show progress
-  cat(".")
-
   # pull the html nodes
   # TODO add ua
   # TODO test return values
@@ -118,7 +115,7 @@ scrape_menu <- function(url, selector, date) {
     nodes_df <- rule_IDs
   }
 
-  # TODO rename nodes_df columns if one of the selectors used ?
+  # TODO? rename nodes_df columns if one of the selectors used
   return(nodes_df)
 
 }
