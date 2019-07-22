@@ -19,6 +19,6 @@ Scrape chapter structure
 \dontrun{
 sectors <- scrape_sector_structure("http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007")
 parts <- scrape_part_structure(sectors)
-scrape_chapter_structure(parts)
+chapters <- scrape_chapter_structure(parts)
 }
 }
