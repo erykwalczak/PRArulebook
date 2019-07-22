@@ -20,6 +20,6 @@ Scrape rule structure
 sectors <- scrape_sector_structure("http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007")
 parts <- scrape_part_structure(sectors)
 chapters <- scrape_chapter_structure(parts)
-scrape_rule_structure(chapters, "16-11-2007")
+rules <- scrape_rule_structure(chapters, "16-11-2007")
 }
 }
