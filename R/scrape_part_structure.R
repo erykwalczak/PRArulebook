@@ -11,7 +11,6 @@
 #' scrape_part_structure(sectors)
 #' }
 scrape_part_structure <- function(df) {
-  cat("\n")
   cat("--- Scraping PARTS ---")
   cat("\n")
   # get all parts and append to a data frame
