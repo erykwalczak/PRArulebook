@@ -31,14 +31,16 @@ This is quite large so only small parts were scraped.
 
 See what was scraped:
 
-```{r}
+```{r, warning = FALSE, message = FALSE}
+library(dplyr)
+
 dplyr::glimpse(parts)
 ```
 
 
 Visualise the structure:
 
-```{r}
+```{r, warning = FALSE, message = FALSE}
 library(collapsibleTree)
 
 Handbook <- parts
@@ -53,4 +55,27 @@ collapsibleTree(
 )
 ```
 
+Obtaining rule-level content (including rule URLs) is a slow process and might not be needed. 
+
+```{r, eval = FALSE}
+rules_df <-
+  scrape_rule_structure(chapters_df,
+                        date = "16-11-2007")
+```
+
+This will generate a data frame with rule-level structure. The next step (if you require the lowest level of the data) is obtaining the rule IDs and text. This is *very slow* as individual rule IDs are not so easy to extract and the scraper needs to visit every single rule URL.
+
+```{r, eval = FALSE}
+rules_df_id <- list()
+
+for (i in 1:nrow(rules_df)) {
+  print(i)
+  rules_df_id[[i]] <-
+    scrape_rule_id(rules_df$rule_url[i],
+                   rules_df$rule_number_sel[i],
+                   rules_df$rule_text_sel[i])
+}
+
+rules_df_id_df <- dplyr::bind_rows(rules_df_id)
+```
 
