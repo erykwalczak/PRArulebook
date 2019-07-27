@@ -156,22 +156,7 @@ rules_df <-
                         date = "16-11-2007")
 ```
 
-This will generate a data frame with rule-level structure. The next step
-is obtaining the rule IDs and text.
-
-``` r
-rules_df_id <- list()
-
-for (i in 1:nrow(rules_df)) {
-  print(i)
-  rules_df_id[[i]] <-
-    scrape_rule_id(rules_df$rule_url[i],
-                   rules_df$rule_number_sel[i],
-                   rules_df$rule_text_sel[i])
-}
-
-rules_df_id_df <- dplyr::bind_rows(rules_df_id)
-```
+This will generate a data frame with rule-level structure.
 
 ### Disclaimer
 
