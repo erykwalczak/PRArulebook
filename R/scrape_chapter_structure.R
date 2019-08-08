@@ -17,7 +17,8 @@ scrape_chapter_structure <- function(df) {
   cat("\n")
 
   # start multicore processing
-  future::plan(multiprocess)
+  library(future)
+  plan(multiprocess)
 
   # get all chapters and append to a data frame
   chapters <-
