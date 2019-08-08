@@ -66,6 +66,28 @@ layers and each of them can be passed to the `layer` argument of
 
 ![](get_structure_demo.gif)
 
+This will produce a data frame with the
+
+``` r
+library(dplyr)
+
+glimpse(head(rules))
+#> Observations: 6
+#> Variables: 12
+#> $ rule_url        <chr> "http://www.prarulebook.co.uk/rulebook/Content/R…
+#> $ rule_id         <chr> "216147", "216148", "216149", "216150", "216151"…
+#> $ rule_number_sel <chr> "#216147+ .div-row .rule-number", "#216148+ .div…
+#> $ rule_text_sel   <chr> "#216147+ .div-row .col3", "#216148+ .div-row .c…
+#> $ rule_link_sel   <chr> "#216147+ .div-row a", "#216148+ .div-row a", "#…
+#> $ chapter_url     <chr> "http://www.prarulebook.co.uk/rulebook/Content/C…
+#> $ chapter_name    <chr> "PRIN 1 Introduction", "PRIN 1 Introduction", "P…
+#> $ part_url        <chr> "http://www.prarulebook.co.uk/rulebook/Content/P…
+#> $ part_name       <chr> "PRIN Principles for Businesses", "PRIN Principl…
+#> $ sector_url      <chr> "http://www.prarulebook.co.uk/rulebook/Content/S…
+#> $ sector_name     <chr> "High Level Standards", "High Level Standards", …
+#> $ rulebook_url    <chr> "http://www.prarulebook.co.uk/rulebook/Home/Hand…
+```
+
 ### Content
 
 #### Text
@@ -90,9 +112,8 @@ it took 153 sec to run the scraper in parallel vs. 249 sec using
 ``` r
 library(furrr)
 library(future)
-library(dplyr)
 
-future::plan(multiprocess)
+plan(multiprocess)
 
 parts_text <-
   furrr::future_map_dfr(parts$part_url,

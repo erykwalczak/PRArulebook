@@ -63,6 +63,95 @@ This will start scraping the PRA rulebook. Pulling data will take longer if you 
 
 ![](get_structure_demo.gif)
 
+```{r, echo = FALSE}
+# assign previously scraped data frame to avoid continuously scraping the rules
+rules <-
+  structure(list(rule_url = c("http://www.prarulebook.co.uk/rulebook/Content/Rule/216147/16-11-2007#216147", 
+"http://www.prarulebook.co.uk/rulebook/Content/Rule/216148/16-11-2007#216148", 
+"http://www.prarulebook.co.uk/rulebook/Content/Rule/216149/16-11-2007#216149", 
+"http://www.prarulebook.co.uk/rulebook/Content/Rule/216150/16-11-2007#216150", 
+"http://www.prarulebook.co.uk/rulebook/Content/Rule/216151/16-11-2007#216151", 
+"http://www.prarulebook.co.uk/rulebook/Content/Rule/216152/16-11-2007#216152", 
+"http://www.prarulebook.co.uk/rulebook/Content/Rule/216153/16-11-2007#216153", 
+"http://www.prarulebook.co.uk/rulebook/Content/Rule/216154/16-11-2007#216154", 
+"http://www.prarulebook.co.uk/rulebook/Content/Rule/216155/16-11-2007#216155", 
+"http://www.prarulebook.co.uk/rulebook/Content/Rule/216156/16-11-2007#216156"
+), rule_id = c("216147", "216148", "216149", "216150", "216151", 
+"216152", "216153", "216154", "216155", "216156"), rule_number_sel = c("#216147+ .div-row .rule-number", 
+"#216148+ .div-row .rule-number", "#216149+ .div-row .rule-number", 
+"#216150+ .div-row .rule-number", "#216151+ .div-row .rule-number", 
+"#216152+ .div-row .rule-number", "#216153+ .div-row .rule-number", 
+"#216154+ .div-row .rule-number", "#216155+ .div-row .rule-number", 
+"#216156+ .div-row .rule-number"), rule_text_sel = c("#216147+ .div-row .col3", 
+"#216148+ .div-row .col3", "#216149+ .div-row .col3", "#216150+ .div-row .col3", 
+"#216151+ .div-row .col3", "#216152+ .div-row .col3", "#216153+ .div-row .col3", 
+"#216154+ .div-row .col3", "#216155+ .div-row .col3", "#216156+ .div-row .col3"
+), rule_link_sel = c("#216147+ .div-row a", "#216148+ .div-row a", 
+"#216149+ .div-row a", "#216150+ .div-row a", "#216151+ .div-row a", 
+"#216152+ .div-row a", "#216153+ .div-row a", "#216154+ .div-row a", 
+"#216155+ .div-row a", "#216156+ .div-row a"), chapter_url = c("http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007"
+), chapter_name = c("PRIN 1 Introduction", "PRIN 1 Introduction", 
+"PRIN 1 Introduction", "PRIN 1 Introduction", "PRIN 1 Introduction", 
+"PRIN 1 Introduction", "PRIN 1 Introduction", "PRIN 1 Introduction", 
+"PRIN 1 Introduction", "PRIN 1 Introduction"), part_url = c("http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007"
+), part_name = c("PRIN Principles for Businesses", "PRIN Principles for Businesses", 
+"PRIN Principles for Businesses", "PRIN Principles for Businesses", 
+"PRIN Principles for Businesses", "PRIN Principles for Businesses", 
+"PRIN Principles for Businesses", "PRIN Principles for Businesses", 
+"PRIN Principles for Businesses", "PRIN Principles for Businesses"
+), sector_url = c("http://www.prarulebook.co.uk/rulebook/Content/Sector/216144/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Sector/216144/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Sector/216144/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Sector/216144/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Sector/216144/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Sector/216144/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Sector/216144/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Sector/216144/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Sector/216144/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Content/Sector/216144/16-11-2007"
+), sector_name = c("High Level Standards", "High Level Standards", 
+"High Level Standards", "High Level Standards", "High Level Standards", 
+"High Level Standards", "High Level Standards", "High Level Standards", 
+"High Level Standards", "High Level Standards"), rulebook_url = c("http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", 
+"http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007"
+)), row.names = c(NA, 10L), class = "data.frame")
+```
+
+This will produce a data frame with the 
+
+```{r, message = FALSE, warning = FALSE}
+library(dplyr)
+
+glimpse(head(rules))
+```
+
+
 ### Content
 
 #### Text
@@ -81,9 +170,8 @@ There is another, even faster way, to acquire this data by scraping the website 
 ```{r, eval = FALSE}
 library(furrr)
 library(future)
-library(dplyr)
 
-future::plan(multiprocess)
+plan(multiprocess)
 
 parts_text <-
   furrr::future_map_dfr(parts$part_url,
