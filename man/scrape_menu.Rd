@@ -14,7 +14,7 @@ scrape_menu(url, selector, date)
 \item{date}{String. Optional date. Needed only for rule ID scraping.}
 }
 \value{
-Data frame with text, url, or both.
+Data frame with names and URLs of rulebook elements.
 }
 \description{
 Scrapes names and URLs from the PRA rulebook menu. The menu is on the left-hand side of the rulebook website.
@@ -22,7 +22,6 @@ Scrapes names and URLs from the PRA rulebook menu. The menu is on the left-hand 
 \examples{
 \dontrun{
 scrape_menu("http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", ".nav-child a")
-scrape_menu("http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", ".nav-child a", "text")
 scrape_menu("http://www.prarulebook.co.uk/rulebook/Content/Chapter/242047/16-11-2007", "a", date = "16-11-2007")
 }
 }
