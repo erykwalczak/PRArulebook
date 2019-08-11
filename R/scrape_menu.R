@@ -6,13 +6,12 @@
 #' @param selector String. CSS selector to scrape. Use Chrome with SelectorGadget to find the relevant selector.
 #' @param date String. Optional date. Needed only for rule ID scraping.
 #'
-#' @return Data frame with text, url, or both.
+#' @return Data frame with names and URLs of rulebook elements.
 #' @export
 #'
 #' @examples
 #' \dontrun{
 #' scrape_menu("http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", ".nav-child a")
-#' scrape_menu("http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", ".nav-child a", "text")
 #' scrape_menu("http://www.prarulebook.co.uk/rulebook/Content/Chapter/242047/16-11-2007", "a", date = "16-11-2007")
 #' }
 scrape_menu <- function(url, selector, date) {
@@ -23,9 +22,28 @@ scrape_menu <- function(url, selector, date) {
   # pull the html nodes
   # TODO add ua
   # TODO test return values
-  nodes_only <- httr::GET(url) %>%
-    xml2::read_html() %>%
-    rvest::html_nodes(selector)
+  # nodes_only <- httr::GET(url) %>%
+  #   xml2::read_html() %>%
+  #   rvest::html_nodes(selector)
+
+  # TEST
+  #nodes_only <- httr::GET("http://www.prarulebook.co.uk/rulebook/Content/Part/229754/12-11-2012") # error/empty
+  #nodes_only <- httr::GET("http://www.prarulebook.co.uk/rulebook/Content/Part/341725/11-08-2019") # normal
+  nodes_only <- httr::GET(url)
+  nodes_only <- extract_results(nodes_only)
+
+  if (is.null(nodes_only)) {
+    # e.g. this URL can be returned as empty because it is not active anymore
+    # http://www.prarulebook.co.uk/rulebook/Content/Part/229754/12-11-2012
+    nodes_df <- data.frame(name = NA,
+                           menu_url = NA,
+                           provided_url = url,
+                           stringsAsFactors = FALSE)
+  } else {
+    nodes_only <-
+      nodes_only %>%
+      rvest::html_nodes(selector)
+  }
 
   # pull text
   nodes_text <- nodes_only %>% rvest::html_text()
@@ -50,7 +68,7 @@ scrape_menu <- function(url, selector, date) {
   }
 
   # combine vectors
-  nodes_df <- data.frame(name = nodes_text,
+  nodes_df <- data.frame(name = trimws(nodes_text),
                          menu_url = nodes_url,
                          provided_url = rep(url, length(nodes_text)),
                          stringsAsFactors = FALSE)
