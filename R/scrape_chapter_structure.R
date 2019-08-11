@@ -12,14 +12,17 @@
 #' chapters <- scrape_chapter_structure(parts)
 #' }
 scrape_chapter_structure <- function(df) {
-  cat("\n")
   cat("--- Scraping CHAPTERS ---")
   cat("\n")
+
+  # start multicore processing
+  #future::plan(multiprocess)
 
   # get all chapters and append to a data frame
   chapters <-
     purrr::map_df(df$part_url,
-                 scrape_menu, selector = ".Chapter a")
+                 scrape_menu,
+                 selector = ".Chapter a")
   # rename columns
   colnames(chapters) <- c("chapter_name", "chapter_url", "part_url")
 
