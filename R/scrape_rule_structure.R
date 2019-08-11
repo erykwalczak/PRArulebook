@@ -23,7 +23,7 @@ scrape_rule_structure <- function(df, date) {
   # new method - extract IDs - allows getting rule URLs
   # get all rules and append to a data frame
   rules <-
-    furrr::future_map_dfr(df[["chapter_url"]],
+    furrr::future_map_dfr(df$chapter_url,
                           scrape_menu, selector = "a",
                           date = date,
                           .progress = TRUE)
