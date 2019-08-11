@@ -79,3 +79,26 @@ for (i in 1:nrow(rules_df)) {
 rules_df_id_df <- dplyr::bind_rows(rules_df_id)
 ```
 
+## Faster scraping
+
+Future and furrr packages were tested to speed up the process of scraping but this method often resulted in errors. Instead, purrr was used in this package for sending requests.
+
+If you want to experiment with furrr then here is a code example that was previously used in `scrape_chapter_structure.R`:
+
+```{r, eval = FALSE}
+# scrape part-level data
+df <-
+  get_structure("01-01-2010",
+                layer = "part")
+
+# start multicore processing
+library(future)
+plan(multiprocess)
+
+# get all chapters and append to a data frame
+chapters <-
+  furrr::future_map_dfr(df$part_url,
+                scrape_menu, selector = ".Chapter a",
+                .progress = TRUE)
+```
+
