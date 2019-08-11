@@ -2,17 +2,20 @@
 #' @importFrom httr GET
 #' @importFrom httr warn_for_status
 #' @importFrom httr status_code
-#' @importFrom xml2 read_html
+#'
 extract_results <- function(x) {
   httr::warn_for_status(x)
-
+  # if response is correct then return the page
   if (httr::status_code(x) == 200) {
-    html_result <- xml2::read_html(x)
-    return(html_result)
+    return(x)
+  }
+  # otherwise display the page and status code
+  else {
+    print(x)
+    return(NULL)
   }
 }
-
-# in get_content
+# to use in 'get_content()'
 # TODO reorder to speed up checks
 assign_link_type <- function(x) {
   ifelse(is.na(x), NA,
