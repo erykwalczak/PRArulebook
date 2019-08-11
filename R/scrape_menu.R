@@ -27,10 +27,9 @@ scrape_menu <- function(url, selector, date) {
   #   rvest::html_nodes(selector)
 
   # TEST
-  #nodes_only <- httr::GET("http://www.prarulebook.co.uk/rulebook/Content/Part/229754/12-11-2012") # error/empty
-  #nodes_only <- httr::GET("http://www.prarulebook.co.uk/rulebook/Content/Part/341725/11-08-2019") # normal
-  nodes_only <- httr::GET(url)
-  nodes_only <- extract_results(nodes_only)
+  #nodes_only <- httr::GET("http://www.prarulebook.co.uk/rulebook/Content/Part/229754/12-11-2012") %>% extract_results() # error/empty
+  #nodes_only <- httr::GET("http://www.prarulebook.co.uk/rulebook/Content/Part/341725/11-08-2019") %>% extract_results() # normal
+  nodes_only <- httr::GET(url) %>% extract_results()
 
   if (is.null(nodes_only)) {
     # e.g. this URL can be returned as empty because it is not active anymore
@@ -39,14 +38,22 @@ scrape_menu <- function(url, selector, date) {
                            menu_url = NA,
                            provided_url = url,
                            stringsAsFactors = FALSE)
-  } else {
-    nodes_only <-
-      nodes_only %>%
-      rvest::html_nodes(selector)
+    return(nodes_df)
   }
 
+  nodes_only <-
+    nodes_only %>%
+    xml2::read_html() %>%
+    rvest::html_nodes(selector)
+
   # pull text
-  nodes_text <- nodes_only %>% rvest::html_text()
+  nodes_text <-
+    nodes_only %>%
+    rvest::html_text() %>%
+    # remove white spaces
+    textclean::replace_white() %>%
+    trimws()
+
   # check if element is effective
   # e.g. "http://www.prarulebook.co.uk/rulebook/Content/Part/229754/16-11-2007"
   if (length(nodes_text) == 0) {
@@ -68,7 +75,7 @@ scrape_menu <- function(url, selector, date) {
   }
 
   # combine vectors
-  nodes_df <- data.frame(name = trimws(nodes_text),
+  nodes_df <- data.frame(name = nodes_text,
                          menu_url = nodes_url,
                          provided_url = rep(url, length(nodes_text)),
                          stringsAsFactors = FALSE)
