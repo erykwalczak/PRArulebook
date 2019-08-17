@@ -21,14 +21,6 @@ scrape_menu <- function(url, selector, date) {
 
   # pull the html nodes
   # TODO add ua
-  # TODO test return values
-  # nodes_only <- httr::GET(url) %>%
-  #   xml2::read_html() %>%
-  #   rvest::html_nodes(selector)
-
-  # TEST
-  #nodes_only <- httr::GET("http://www.prarulebook.co.uk/rulebook/Content/Part/229754/12-11-2012") %>% extract_results() # error/empty
-  #nodes_only <- httr::GET("http://www.prarulebook.co.uk/rulebook/Content/Part/341725/11-08-2019") %>% extract_results() # normal
   nodes_only <- httr::GET(url) %>% extract_results()
 
   if (is.null(nodes_only)) {
@@ -140,7 +132,6 @@ scrape_menu <- function(url, selector, date) {
     nodes_df <- rule_IDs
   }
 
-  # TODO? rename nodes_df columns if one of the selectors used
   return(nodes_df)
 
 }
