@@ -28,6 +28,9 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
   #selector_rule <- ".rule-number"
   selector_rule <- ".col1"
   selector_text <- ".col3"
+  selector_date <- ".effective-date"
+  selector_label <- ".rule-label"
+
   # rules require specific selector
   if (is.null(single_rule_selector)) {
     selector_links <- ".col3 a"
@@ -72,6 +75,12 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
     # remove the first element to equalise the length of text and rules
     nodes_rule <- nodes_rule[-1]
 
+    # test DATE and LABEL
+    # TODO turn into a function
+    nodes_only_date <- pull_nodes(selector_date)
+    nodes_date <- nodes_only_date %>% rvest::html_text()
+    nodes_date <- nodes_date[-1]
+
     # check if content is available, i.e. chapter/part was effective
     if (length(nodes_only_text) > 0) {
 
@@ -80,6 +89,7 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
         rule_text_df <-
           data.frame(rule_number = trimws(nodes_rule),
                      rule_text = trimws(nodes_text),
+                     rule_date = trimws(nodes_date),
                      url = x,
                      stringsAsFactors = FALSE)
         # TODO clean rule_text_df
