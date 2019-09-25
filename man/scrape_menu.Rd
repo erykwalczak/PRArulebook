@@ -4,14 +4,14 @@
 \alias{scrape_menu}
 \title{Scrape the menu}
 \usage{
-scrape_menu(url, selector, date)
+scrape_menu(url, selector, rulebook_date)
 }
 \arguments{
 \item{url}{Full URL to scrape}
 
 \item{selector}{String. CSS selector to scrape. Use Chrome with SelectorGadget to find the relevant selector.}
 
-\item{date}{String. Optional date. Needed only for rule ID scraping.}
+\item{rulebook_date}{String. Optional date. Needed only for rule ID scraping.}
 }
 \value{
 Data frame with names and URLs of rulebook elements.
@@ -22,6 +22,6 @@ Scrapes names and URLs from the PRA rulebook menu. The menu is on the left-hand 
 \examples{
 \dontrun{
 scrape_menu("http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", ".nav-child a")
-scrape_menu("http://www.prarulebook.co.uk/rulebook/Content/Chapter/242047/16-11-2007", "a", date = "16-11-2007")
+scrape_menu("http://www.prarulebook.co.uk/rulebook/Content/Chapter/242047/16-11-2007", "a", rulebook_date = "16-11-2007")
 }
 }
