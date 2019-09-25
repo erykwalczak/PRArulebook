@@ -4,7 +4,7 @@
 #'
 #' @param url Full URL to scrape
 #' @param selector String. CSS selector to scrape. Use Chrome with SelectorGadget to find the relevant selector.
-#' @param date String. Optional date. Needed only for rule ID scraping.
+#' @param rulebook_date String. Optional date. Needed only for rule ID scraping.
 #'
 #' @return Data frame with names and URLs of rulebook elements.
 #' @export
@@ -12,9 +12,9 @@
 #' @examples
 #' \dontrun{
 #' scrape_menu("http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", ".nav-child a")
-#' scrape_menu("http://www.prarulebook.co.uk/rulebook/Content/Chapter/242047/16-11-2007", "a", date = "16-11-2007")
+#' scrape_menu("http://www.prarulebook.co.uk/rulebook/Content/Chapter/242047/16-11-2007", "a", rulebook_date = "16-11-2007")
 #' }
-scrape_menu <- function(url, selector, date) {
+scrape_menu <- function(url, selector, rulebook_date) {
 
   # TODO add to onLoad
   base_url <- "http://www.prarulebook.co.uk"
@@ -72,66 +72,11 @@ scrape_menu <- function(url, selector, date) {
                          provided_url = rep(url, length(nodes_text)),
                          stringsAsFactors = FALSE)
 
+  return(nodes_df)
+
   # scrape rule IDs and create URLs from them
   if (selector == "a") {
-    IDs <- nodes_only %>% rvest::html_attr("id") %>% na.omit()
-
-    # test if empty
-    # e.g. http://www.prarulebook.co.uk/rulebook/Content/Chapter/302933/16-11-2017
-
-    if (length(IDs) > 0) {
-      # keep only those with numbers
-      # TODO fix warning - suppressMessages() didn't work
-      # .Warning message:
-      # In scrape_menu(URL, : NAs introduced by coercion
-      IDs <- as.numeric(gsub("([0-9]+).*$", "\\1", IDs))
-      IDs <- IDs[!is.na(IDs)]
-      # turn into string to count the characters
-      # IDs have 6 characters
-      IDs <- as.character(IDs)
-      IDs <- ifelse(nchar(IDs) == 6, IDs, NA)
-
-      # create actual URLs
-      rule_urls <-
-        paste0("http://www.prarulebook.co.uk/rulebook/Content/Rule/",
-               IDs,
-               "/",
-               date,
-               "#",
-               IDs)
-
-      # create selectors for rules
-      rule_no_selector <-
-        paste0("#", IDs, "+ .div-row .rule-number")
-      rule_text_selector <-
-        paste0("#", IDs, "+ .div-row .col3")
-      rule_link_selector <-
-        paste0("#", IDs, "+ .div-row a")
-
-    } else {
-
-      IDs <- NA
-      rule_urls <- NA
-      rule_no_selector <- NA
-      rule_text_selector <- NA
-      rule_link_selector <- NA
-
-    }
-
-    # make a df with rule URLs and add IDs
-    rule_IDs <-
-      data.frame(rule_url = rule_urls,
-                 rule_id = IDs,
-                 rule_number_sel = rule_no_selector,
-                 rule_text_sel = rule_text_selector,
-                 rule_link_sel = rule_link_selector,
-                 chapter_url = url,
-                 stringsAsFactors = FALSE)
-
-    # assign the IDs
-    nodes_df <- rule_IDs
+    scrape_menu_rule()
   }
-
-  return(nodes_df)
 
 }
