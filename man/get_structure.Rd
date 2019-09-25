@@ -4,10 +4,10 @@
 \alias{get_structure}
 \title{Scrape the Rulebook structure}
 \usage{
-get_structure(date, layer = "chapter")
+get_structure(rulebook_date, layer = "chapter")
 }
 \arguments{
-\item{date}{Date of the rulebook. Use dd-mm-yyyy format.}
+\item{rulebook_date}{Date of the rulebook. Use dd-mm-yyyy format.}
 
 \item{layer}{Text. Can be: all (default), sector, part, chapter, or rule.}
 }

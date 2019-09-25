@@ -2,7 +2,7 @@
 #'
 #' High-level function to scrape the rulebook structure.
 #'
-#' @param date Date of the rulebook. Use dd-mm-yyyy format.
+#' @param rulebook_date Date of the rulebook. Use dd-mm-yyyy format.
 #' @param layer Text. Can be: all (default), sector, part, chapter, or rule.
 #'
 #' @return Data frame with the rulebook structure.
@@ -16,18 +16,17 @@
 #' get_structure("16-11-2007", layer = "chapter")
 #' get_structure("16-11-2007", layer = "rule")
 #' }
-get_structure <- function(date, layer = "chapter") {
+get_structure <- function(rulebook_date, layer = "chapter") {
   # assign the error message
   date_error_message <- "Provide a correct date in dd-mm-yyyy format. From '01-01-2005' till today."
-  # TODO rename 'date'
 
   # check the arguments
-  if (missing(date)) {
+  if (missing(rulebook_date)) {
     stop(date_error_message)
   }
 
   # validate the input format
-  if (is.na(as.Date(date, format = "%d-%m-%Y"))) {
+  if (is.na(as.Date(rulebook_date, format = "%d-%m-%Y"))) {
     stop(date_error_message)
   }
 
@@ -42,7 +41,7 @@ get_structure <- function(date, layer = "chapter") {
   # check date - if lower than x then change '/rulebook' to '/handbook'
   # first date of 'Rulebook': http://www.prarulebook.co.uk/rulebook/Home/Rulebook/29-08-2015
   cutoff_date <- as.Date("29-08-2015", format = "%d-%m-%Y")
-  date_date <- as.Date(date, format = "%d-%m-%Y")
+  date_date <- as.Date(rulebook_date, format = "%d-%m-%Y")
 
   #regulation_type <-
   if (date_date < cutoff_date) {
@@ -63,12 +62,12 @@ get_structure <- function(date, layer = "chapter") {
   }
 
   # message
-  cat(paste("You are requesting the", rule_type, "as of", date))
+  cat(paste("You are requesting the", rule_type, "as of", rulebook_date))
   cat("\n")
 
   # top URL
   base_url <- "http://www.prarulebook.co.uk"
-  top_url <- paste0(base_url, "/rulebook/Home/", rule_type, "/", date)
+  top_url <- paste0(base_url, "/rulebook/Home/", rule_type, "/", rulebook_date)
 
   ################
   ### SECTORS ###
@@ -108,7 +107,7 @@ get_structure <- function(date, layer = "chapter") {
     sector_structure <- scrape_sector_structure(top_url)
     part_structure <- scrape_part_structure(sector_structure)
     chapter_structure <- scrape_chapter_structure(part_structure)
-    rule_structure <- scrape_rule_structure(chapter_structure, date = date)
+    rule_structure <- scrape_rule_structure(chapter_structure, rulebook_date = rulebook_date)
     return(rule_structure)
   }
 
