@@ -12,7 +12,7 @@
 #' chapters <- scrape_chapter_structure(parts)
 #' rules <- scrape_rule_structure(chapters, "16-11-2007")
 #' }
-scrape_rule_structure <- function(df, date) {
+scrape_rule_structure <- function(df, rulebook_date) {
   cat("\n")
   cat("--- Scraping RULES ---")
   cat("\n")
@@ -21,7 +21,7 @@ scrape_rule_structure <- function(df, date) {
   # get all rules and append to a data frame
   rules <-
     purrr::map_df(df$chapter_url, scrape_menu,
-                  selector = "a", date = date)
+                  selector = "a", rulebook_date = rulebook_date)
 
   rules_chapters_parts_sectors <-
     dplyr::left_join(rules, df,

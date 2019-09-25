@@ -4,7 +4,7 @@
 \alias{scrape_rule_structure}
 \title{Scrape rule structure}
 \usage{
-scrape_rule_structure(df, date)
+scrape_rule_structure(df, rulebook_date)
 }
 \arguments{
 \item{df}{Data frame with chapter URLs. Output of \code{"scrape_chapter_structure"}.}
