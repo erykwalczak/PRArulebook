@@ -27,8 +27,6 @@ sectors <- scrape_sector_structure("http://www.prarulebook.co.uk/rulebook/Home/H
 parts <- scrape_part_structure(sectors)
 ```
 
-This is quite large so only small parts were scraped.
-
 See what was scraped:
 
 ```{r, warning = FALSE, message = FALSE}
@@ -48,20 +46,37 @@ Handbook <- parts
 collapsibleTree(
   Handbook,
   hierarchy = c("sector_name", "part_name"),
-  width = 800,
+  width = 900,
   height = 1100,
   zoomable = FALSE,
   collapsed = FALSE
 )
 ```
 
-Obtaining rule-level content (including rule URLs) is a slow process and might not be needed. 
+Obtaining rule-level content (including rule URLs) takes a bit longer. First, chapters need to be scraped. Then data frame containing chapters can be used to obtain rules:
 
 ```{r, eval = FALSE}
-rules_df <-
-  scrape_rule_structure(chapters_df,
-                        date = "16-11-2007")
+chapters <- scrape_chapter_structure(parts)
 ```
+
+```{r, eval = FALSE}
+rules <-
+  scrape_rule_structure(chapters,
+                        date = "22-03-2006")
+```
+
+
+```{r}
+#test
+for (i in 1:nrow(chapters)) {
+  print(i)
+  #print(chapters[i,])
+  scrape_rule_structure(chapters[i,],
+                        date = "22-03-2006")
+}
+```
+
+
 
 This will generate a data frame with rule-level structure. The next step (if you require the lowest level of the data) is obtaining the rule IDs and text. This is *very slow* as individual rule IDs are not so easy to extract and the scraper needs to visit every single rule URL.
 
@@ -81,9 +96,9 @@ rules_df_id_df <- dplyr::bind_rows(rules_df_id)
 
 ## Faster scraping
 
-Future and furrr packages were tested to speed up the process of scraping but this method often resulted in errors. Instead, purrr was used in this package for sending requests.
+*future* and *furrr* packages were tested to speed up the process of scraping, but this method often resulted in errors so eventually it was not used in this package. Instead, *purrr* was used.
 
-If you want to experiment with furrr then here is a code example that was previously used in `scrape_chapter_structure.R`:
+Here is an example of using *furrr* to acquire chapter-level data:
 
 ```{r, eval = FALSE}
 # scrape part-level data
