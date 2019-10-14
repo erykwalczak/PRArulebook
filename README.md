@@ -4,26 +4,35 @@
 <!-- badges: start -->
 
 [![Lifecycle:
-maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/PRArulebook)](https://cran.r-project.org/package=PRArulebook)
 <!-- badges: end -->
 
-The goal of `PRArulebook` is to scrape the Prudential Regulation
-Authority [Rulebook](http://www.prarulebook.co.uk/) to obtain its text
-and structure.
+`PRArulebook` is a package to scrape the PRA (Prudential Regulation
+Authority) [Rulebook](http://www.prarulebook.co.uk/) (the website
+containing the rules made and enforced by the PRA under powers conferred
+by the Financial Services and Markets Act 2000 (FSMA)).
 
-This package was developed while preparing the following Staff Working
-Paper:
+The input to this package is the PRA Rulebook website. Outputs from this
+package are the rules published on the PRA Rulebook website in a format
+more amenable to text and network analysis.
+
+`PRArulebook` was developed while preparing:
 
 Amadxarif, Z., Brookes, J., Garbarino, N., Patel, R., Walczak, E. (2019)
-*Textual Complexity in Prudential Regulation*. Bank of England Staff
-Working Paper No. xxx.
+*The Language of Rules: Textual Complexity in Banking Reforms*. Bank of
+England Staff Working Paper.
+
+Any use of this package with the PRA Rulebook must comply with the PRA
+Rulebook’s [Terms of Use](http://www.prarulebook.co.uk/terms-of-use).
+These include restrictions on using content from the PRA Rulebook for
+commercial purposes without obtaining a licence from the PRA.
 
 ## Installation
 
-You can install the development version of `PRArulebook` from
-[GitHub](https://github.com/) with:
+You can install the development version of `PRArulebook` from GitHub
+with:
 
 ``` r
 # install.packages("devtools")
@@ -64,29 +73,8 @@ layers and each of them can be passed to the `layer` argument of
   - `chapter`
   - `rule`
 
-![](get_structure_demo.gif)
-
-This will produce a data frame with the
-
-``` r
-library(dplyr)
-
-glimpse(head(rules))
-#> Observations: 6
-#> Variables: 12
-#> $ rule_url        <chr> "http://www.prarulebook.co.uk/rulebook/Content/R…
-#> $ rule_id         <chr> "216147", "216148", "216149", "216150", "216151"…
-#> $ rule_number_sel <chr> "#216147+ .div-row .rule-number", "#216148+ .div…
-#> $ rule_text_sel   <chr> "#216147+ .div-row .col3", "#216148+ .div-row .c…
-#> $ rule_link_sel   <chr> "#216147+ .div-row a", "#216148+ .div-row a", "#…
-#> $ chapter_url     <chr> "http://www.prarulebook.co.uk/rulebook/Content/C…
-#> $ chapter_name    <chr> "PRIN 1 Introduction", "PRIN 1 Introduction", "P…
-#> $ part_url        <chr> "http://www.prarulebook.co.uk/rulebook/Content/P…
-#> $ part_name       <chr> "PRIN Principles for Businesses", "PRIN Principl…
-#> $ sector_url      <chr> "http://www.prarulebook.co.uk/rulebook/Content/S…
-#> $ sector_name     <chr> "High Level Standards", "High Level Standards", …
-#> $ rulebook_url    <chr> "http://www.prarulebook.co.uk/rulebook/Home/Hand…
-```
+This will produce a data frame with information about the structure
+(i.e. URLs and names).
 
 ### Content
 
@@ -148,14 +136,8 @@ parts_links <-
 The code above will return a data frame with *from/to url*, *text* used
 in a link, and a *type* of a link.
 
-This
-[page](http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007)
-with extracted links (edges) will return the following
-
-![](parts_links.png)
-
 Scraped data containing information about the links can be used for
-network analysis (warning: further cleaning is required).
+network analysis (warning: further cleaning might be required).
 
 ### Rule-level data
 
@@ -181,7 +163,5 @@ This will generate a data frame with rule-level structure.
 
 ### Disclaimer
 
-This is an outcome of a research project and is not an official Bank of
-England software. All errors are mine. The software and code samples are
-provided “as is” without warranty of any kind, either express or
-implied. Use at your own risk.
+This package is an outcome of a research project. All errors are mine.
+All views expressed are personal views, not those of any employer.
