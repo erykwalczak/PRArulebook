@@ -20,9 +20,9 @@ more amenable to text and network analysis.
 
 `PRArulebook` was developed while preparing:
 
-Amadxarif, Z., Brookes, J., Garbarino, N., Patel, R., Walczak, E. (2019)
-*The Language of Rules: Textual Complexity in Banking Reforms*. Bank of
-England Staff Working Paper.
+**Amadxarif, Z., Brookes, J., Garbarino, N., Patel, R., Walczak, E.
+(2019) *The Language of Rules: Textual Complexity in Banking Reforms*.
+Bank of England Staff Working Paper.**
 
 Any use of this package with the PRA Rulebook must comply with the PRA
 Rulebook’s [Terms of Use](http://www.prarulebook.co.uk/terms-of-use).
@@ -35,9 +35,23 @@ You can install the development version of `PRArulebook` from GitHub
 with:
 
 ``` r
-# install.packages("devtools")
+install.packages("devtools")
 devtools::install_github("erzk/PRArulebook")
 ```
+
+## Data
+
+`PRArulebook` scrapes two types of data: **structure** and **content**.
+
+  - **Structure** - hierarchy of the PRA Rulebook. Includes URLs and
+    names.
+
+  - **Content**
+    
+      - Text - can be use for text analysis
+      - Network - can be used for network analysis.
+
+The next section shows how to extract these types of data.
 
 ## Examples
 
@@ -58,25 +72,29 @@ parts <-
   get_structure("16-11-2007",
                 layer = "part")
 # or rule-level (without rule-level URLs)
-rules <-
+chapters <-
   get_structure("18-06-2019",
-                layer = "rule")
+                layer = "chapter")
 ```
 
-This will start scraping the PRA rulebook. Pulling data will take longer
-if you decide to pull more granular data. The rulebook has several
-layers and each of them can be passed to the `layer` argument of
+This will start scraping the PRA rulebook. Warnings
+([410](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) code)
+will be displayed when a page is no longer active. Pulling data will
+take longer if you decide to pull more granular data. The rulebook has
+several layers and each of them can be passed to the `layer` argument of
 `get_structure` (in descending order):
 
   - `sector`
   - `part`
   - `chapter`
-  - `rule`
 
-This will produce a data frame with information about the structure
+The output will be a data frame with information about the structure
 (i.e. URLs and names).
 
 ### Content
+
+Once the structure URLs are scraped, they can be used to extract
+content.
 
 #### Text
 
@@ -142,9 +160,9 @@ network analysis (warning: further cleaning might be required).
 ### Rule-level data
 
 Things get a bit more complicated when you need **rules and their
-corresponding URLs**. This requires digging through the code on the
-chapter-level and then visiting each rule separately so it is **much
-slower** than the previous method.
+corresponding URLs** (the lowest level of aggregation). This level
+requires digging through the code on the chapter-level and then visiting
+each rule separately so it is **much slower** than the previous method.
 
 The first command extracts the structure on the chapter-level. The
 second command extracts rule-IDs.

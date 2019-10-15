@@ -23,7 +23,7 @@ The input to this package is the PRA Rulebook website. Outputs from this package
 
 `PRArulebook` was developed while preparing:
 
-Amadxarif, Z., Brookes, J., Garbarino, N., Patel, R., Walczak, E. (2019) *The Language of Rules: Textual Complexity in Banking Reforms*. Bank of England Staff Working Paper.
+**Amadxarif, Z., Brookes, J., Garbarino, N., Patel, R., Walczak, E. (2019) *The Language of Rules: Textual Complexity in Banking Reforms*. Bank of England Staff Working Paper.**
 
 Any use of this package with the PRA Rulebook must comply with the PRA Rulebook's [Terms of Use](http://www.prarulebook.co.uk/terms-of-use). These include restrictions on using content from the PRA Rulebook for commercial purposes without obtaining a licence from the PRA.
 
@@ -31,10 +31,23 @@ Any use of this package with the PRA Rulebook must comply with the PRA Rulebook'
 
 You can install the development version of `PRArulebook` from GitHub with:
 
-``` r
-# install.packages("devtools")
+```{r, eval = FALSE}
+install.packages("devtools")
 devtools::install_github("erzk/PRArulebook")
 ```
+
+## Data
+
+`PRArulebook` scrapes two types of data: **structure** and **content**.
+
+* **Structure** - hierarchy of the PRA Rulebook. Includes URLs and names.
+
+* **Content**
+  * Text - can be use for text analysis
+  * Network - can be used for network analysis.
+
+The next section shows how to extract these types of data.
+
 ## Examples
 
 Load the package
@@ -53,101 +66,22 @@ parts <-
   get_structure("16-11-2007",
                 layer = "part")
 # or rule-level (without rule-level URLs)
-rules <-
+chapters <-
   get_structure("18-06-2019",
-                layer = "rule")
+                layer = "chapter")
 ```
 
-This will start scraping the PRA rulebook. Pulling data will take longer if you decide to pull more granular data. The rulebook has several layers and each of them can be passed to the `layer` argument of `get_structure` (in descending order):
+This will start scraping the PRA rulebook. Warnings ([410](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) code) will be displayed when a page is no longer active. Pulling data will take longer if you decide to pull more granular data. The rulebook has several layers and each of them can be passed to the `layer` argument of `get_structure` (in descending order):
 
 * `sector`
 * `part`
 * `chapter`
-* `rule`
 
-```{r, echo = FALSE}
-# assign previously scraped data frame to avoid continuously scraping the rules
-rules <-
-  structure(list(rule_url = c("http://www.prarulebook.co.uk/rulebook/Content/Rule/216147/16-11-2007#216147", 
-"http://www.prarulebook.co.uk/rulebook/Content/Rule/216148/16-11-2007#216148", 
-"http://www.prarulebook.co.uk/rulebook/Content/Rule/216149/16-11-2007#216149", 
-"http://www.prarulebook.co.uk/rulebook/Content/Rule/216150/16-11-2007#216150", 
-"http://www.prarulebook.co.uk/rulebook/Content/Rule/216151/16-11-2007#216151", 
-"http://www.prarulebook.co.uk/rulebook/Content/Rule/216152/16-11-2007#216152", 
-"http://www.prarulebook.co.uk/rulebook/Content/Rule/216153/16-11-2007#216153", 
-"http://www.prarulebook.co.uk/rulebook/Content/Rule/216154/16-11-2007#216154", 
-"http://www.prarulebook.co.uk/rulebook/Content/Rule/216155/16-11-2007#216155", 
-"http://www.prarulebook.co.uk/rulebook/Content/Rule/216156/16-11-2007#216156"
-), rule_id = c("216147", "216148", "216149", "216150", "216151", 
-"216152", "216153", "216154", "216155", "216156"), rule_number_sel = c("#216147+ .div-row .rule-number", 
-"#216148+ .div-row .rule-number", "#216149+ .div-row .rule-number", 
-"#216150+ .div-row .rule-number", "#216151+ .div-row .rule-number", 
-"#216152+ .div-row .rule-number", "#216153+ .div-row .rule-number", 
-"#216154+ .div-row .rule-number", "#216155+ .div-row .rule-number", 
-"#216156+ .div-row .rule-number"), rule_text_sel = c("#216147+ .div-row .col3", 
-"#216148+ .div-row .col3", "#216149+ .div-row .col3", "#216150+ .div-row .col3", 
-"#216151+ .div-row .col3", "#216152+ .div-row .col3", "#216153+ .div-row .col3", 
-"#216154+ .div-row .col3", "#216155+ .div-row .col3", "#216156+ .div-row .col3"
-), rule_link_sel = c("#216147+ .div-row a", "#216148+ .div-row a", 
-"#216149+ .div-row a", "#216150+ .div-row a", "#216151+ .div-row a", 
-"#216152+ .div-row a", "#216153+ .div-row a", "#216154+ .div-row a", 
-"#216155+ .div-row a", "#216156+ .div-row a"), chapter_url = c("http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Chapter/216146/16-11-2007"
-), chapter_name = c("PRIN 1 Introduction", "PRIN 1 Introduction", 
-"PRIN 1 Introduction", "PRIN 1 Introduction", "PRIN 1 Introduction", 
-"PRIN 1 Introduction", "PRIN 1 Introduction", "PRIN 1 Introduction", 
-"PRIN 1 Introduction", "PRIN 1 Introduction"), part_url = c("http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Part/216145/16-11-2007"
-), part_name = c("PRIN Principles for Businesses", "PRIN Principles for Businesses", 
-"PRIN Principles for Businesses", "PRIN Principles for Businesses", 
-"PRIN Principles for Businesses", "PRIN Principles for Businesses", 
-"PRIN Principles for Businesses", "PRIN Principles for Businesses", 
-"PRIN Principles for Businesses", "PRIN Principles for Businesses"
-), sector_url = c("http://www.prarulebook.co.uk/rulebook/Content/Sector/216144/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Sector/216144/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Sector/216144/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Sector/216144/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Sector/216144/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Sector/216144/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Sector/216144/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Sector/216144/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Sector/216144/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Content/Sector/216144/16-11-2007"
-), sector_name = c("High Level Standards", "High Level Standards", 
-"High Level Standards", "High Level Standards", "High Level Standards", 
-"High Level Standards", "High Level Standards", "High Level Standards", 
-"High Level Standards", "High Level Standards"), rulebook_url = c("http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007", 
-"http://www.prarulebook.co.uk/rulebook/Home/Handbook/16-11-2007"
-)), row.names = c(NA, 10L), class = "data.frame")
-```
-
-This will produce a data frame with information about the structure (i.e. URLs and names).
+The output will be a data frame with information about the structure (i.e. URLs and names).
 
 ### Content
+
+Once the structure URLs are scraped, they can be used to extract content. 
 
 #### Text
 
@@ -201,7 +135,7 @@ Scraped data containing information about the links can be used for network anal
 
 ### Rule-level data
 
-Things get a bit more complicated when you need **rules and their corresponding URLs**. This requires digging through the code on the chapter-level and then visiting each rule separately so it is **much slower** than the previous method. 
+Things get a bit more complicated when you need **rules and their corresponding URLs** (the lowest level of aggregation). This level requires digging through the code on the chapter-level and then visiting each rule separately so it is **much slower** than the previous method. 
 
 The first command extracts the structure on the chapter-level. The second command extracts rule-IDs.
 
