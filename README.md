@@ -48,7 +48,7 @@ devtools::install_github("erzk/PRArulebook")
 
   - **Content**
     
-      - Text - can be use for text analysis
+      - Text - can be used for text analysis
       - Network - can be used for network analysis.
 
 The next section shows how to extract these types of data.
