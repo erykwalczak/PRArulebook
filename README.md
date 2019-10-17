@@ -26,8 +26,9 @@ Bank of England Staff Working Paper.**
 
 Any use of this package with the PRA Rulebook must comply with the PRA
 Rulebook’s [Terms of Use](http://www.prarulebook.co.uk/terms-of-use).
-These include restrictions on using content from the PRA Rulebook for
-commercial purposes without obtaining a licence from the PRA.
+These include, but are not limited to, restrictions on using content
+from the PRA Rulebook for commercial purposes without obtaining a
+licence from the PRA.
 
 ## Installation
 
