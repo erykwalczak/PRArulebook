@@ -15,7 +15,7 @@ extract_results <- function(x) {
     return(NULL)
   }
 }
-# to use in 'get_content()'
+# to use in 'get_content_links()'
 # TODO reorder to speed up checks
 assign_link_type <- function(x) {
   ifelse(is.na(x), NA,
@@ -26,4 +26,13 @@ assign_link_type <- function(x) {
                                      ifelse(grepl("LegalInstrument", x), "Legal",
                                             ifelse(grepl("/Glossary", x), "Glossary",
                                                    "Other")))))))
+}
+
+# clean the links - append "http:" if it's a rulebook url
+clean_to_link <- function(url_to_clean) {
+  cleaned_url <-
+    ifelse(startsWith(url_to_clean, "/rulebook/"),
+           paste0("http://www.prarulebook.co.uk", url_to_clean),
+           url_to_clean)
+  return(cleaned_url)
 }
