@@ -169,13 +169,15 @@ The first command extracts the structure on the chapter-level. The
 second command extracts rule-IDs.
 
 ``` r
+# this function displays warnings (410) when a given element is inactive
 chapters_df <-
   get_structure("16-11-2007",
                 layer = "chapter")
 
+# extracting rule identifiers requires a different function
 rules_df <-
   scrape_rule_structure(chapters_df,
-                        date = "16-11-2007")
+                        rulebook_date = "16-11-2007")
 ```
 
 This will generate a data frame with rule-level structure.
