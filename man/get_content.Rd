@@ -9,7 +9,7 @@ get_content(x, type = "text", single_rule_selector = NULL)
 \arguments{
 \item{x}{String. URL to scrape.}
 
-\item{type}{String. Type of information to scrape. "Text" or "links".}
+\item{type}{String. Type of information to scrape. "text" or "links".}
 
 \item{single_rule_selector}{String. Optional. CSS selector for individual rules.}
 }
@@ -23,7 +23,5 @@ Extract the full text or links from the PRA Rulebook given the URL.
 \dontrun{
 get_content("http://www.prarulebook.co.uk/rulebook/Content/Chapter/242047/16-11-2007")
 get_content("http://www.prarulebook.co.uk/rulebook/Content/Chapter/242047/16-11-2007", "links")
-get_content("http://www.prarulebook.co.uk/rulebook/Content/Rule/216149/16-11-2007#216149",
-"links", "yes")
 }
 }
