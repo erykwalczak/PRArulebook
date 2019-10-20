@@ -4,7 +4,7 @@
 <!-- badges: start -->
 
 [![Lifecycle:
-stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/PRArulebook)](https://cran.r-project.org/package=PRArulebook)
 <!-- badges: end -->
@@ -72,7 +72,8 @@ The simplest way to extract a rulebook structure is to use
 parts <-
   get_structure("16-11-2007",
                 layer = "part")
-# or rule-level (without rule-level URLs)
+# or chapter-level
+# warnings (410) are displayed for inactive sites
 chapters <-
   get_structure("18-06-2019",
                 layer = "chapter")
@@ -100,56 +101,39 @@ content.
 #### Text
 
 To get content of the rulebook (text or links) use `get_content`
-function a URL of a given chapter/part/sector. This function can be
-applied on the entire rulebook in the following way
+function with a URL of a given chapter.
 
 ``` r
-# scrape text
-parts_text <-
-  purrr::map_df(parts$part_url,
-                get_content)
+# scrape text from a single chapter
+chapter <- get_content(chapters$chapter_url[1])
 ```
 
-There is another, even faster way, to acquire this data by scraping the
-website in parallel using
-[furrr](https://cran.r-project.org/web/packages/furrr/). In this example
-it took 153 sec to run the scraper in parallel vs. 249 sec using
-`purrr`.
+This function can be applied on the entire rulebook in the following
+way:
 
 ``` r
-library(furrr)
-library(future)
+library(purrr)
 
-plan(multiprocess)
-
-parts_text <-
-  furrr::future_map_dfr(parts$part_url,
-                        get_content,
-                        .progress = TRUE)
+chapters_text <-
+  map_df(chapters$chapter_url[1:5],
+                get_content)
 ```
 
 #### Network
 
 To scrape the links and create data set for network analysis
 `get_content` function can be used but with a `type` argument set to
-`"link"`. Like in the previous example, this call can also be
+`"links"`. Like in the previous example, this call can also be
 parallelised.
 
 ``` r
+chapter_link <- get_content(chapters$chapter_url[1], "links")
+
 # sequential
 parts_links <-
-  purrr::map_df(parts$part_url,
+  purrr::map_df(parts$part_url[1:5],
                 get_content,
                 "links")
-
-# parallel (faster)
-future::plan(multiprocess)
-
-parts_links <-
-  furrr::future_map_dfr(parts$part_url,
-                        get_content,
-                        "links",
-                        .progress = TRUE)
 ```
 
 The code above will return a data frame with *from/to url*, *text* used
@@ -157,30 +141,6 @@ in a link, and a *type* of a link.
 
 Scraped data containing information about the links can be used for
 network analysis (warning: further cleaning might be required).
-
-### Rule-level data
-
-Things get a bit more complicated when you need **rules and their
-corresponding URLs** (the lowest level of aggregation). This level
-requires digging through the code on the chapter-level and then visiting
-each rule separately so it is **much slower** than the previous method.
-
-The first command extracts the structure on the chapter-level. The
-second command extracts rule-IDs.
-
-``` r
-# this function displays warnings (410) when a given element is inactive
-chapters_df <-
-  get_structure("16-11-2007",
-                layer = "chapter")
-
-# extracting rule identifiers requires a different function
-rules_df <-
-  scrape_rule_structure(chapters_df,
-                        rulebook_date = "16-11-2007")
-```
-
-This will generate a data frame with rule-level structure.
 
 ### Disclaimer
 
