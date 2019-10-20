@@ -1,13 +1,44 @@
 #' Scrape the Rulebook content (text)
 #'
+#' @param x
+#' @param selector_text
+#' @param selector_rule
+#' @param selector_date
+#'
 #' @return Data frame
 #' @export
 #'
 #' @examples
-get_content_text <- function() {
+get_content_text <- function(x, selector_text, selector_rule, selector_date) {
+
+  # define functions
+  # main function that check the page status and extracts the nodes
+  pull_nodes <- function(node_to_pull) {
+    status_check <- httr::GET(x) %>% httr::status_code()
+
+    if (status_check != 200) {
+      nodes_only <- NA
+      return(nodes_only)
+    } else {
+      # pull text from selectors
+      pull200 <- function(x) {
+        xml200 <- httr::GET(x) %>% xml2::read_html()
+        list200 <- xml200 %>% rvest::html_nodes(., node_to_pull)
+        html200text <- rvest::html_text(list200) %>% trimws() # breaks when "links" pulled
+        return(html200text)
+      }
+
+      # check if page is active/effective
+      # e.g. http://www.prarulebook.co.uk/rulebook/Content/Part/229754/16-11-2007 is not effective (code 410)
+      nodes_only <- pull200(x)
+      return(nodes_only)
+    }
+  }
+
   # scrape
   nodes_text <- pull_nodes(selector_text)
   nodes_text <- rvest::html_text(nodes_text) %>% trimws()
+
 
   # TODO pull rule names/turn into df/clean
   # pull rules

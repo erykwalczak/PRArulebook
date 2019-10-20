@@ -26,6 +26,7 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
 
   # CSS selectors
   #selector_rule <- ".rule-number"
+  x <- x
   selector_rule <- ".col1"
   selector_text <- ".col3"
   selector_date <- ".effective-date"
@@ -46,24 +47,7 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
   }
 
   # return NA when selectors are not present
-  pull_nodes <- function(node_to_pull) {
-    status_check <- httr::GET(x) %>% httr::status_code()
-
-    # pull text from selectors
-    pull200 <- function(x) {
-      xml200 <- httr::GET(x) %>% xml2::read_html()
-      list200 <- xml200 %>% rvest::html_nodes(., node_to_pull)
-      #html200text <- rvest::html_text(list200) %>% trimws() # breaks when "links" pulled
-      return(list200)
-    }
-
-    # check if page is active/effective
-    # e.g. http://www.prarulebook.co.uk/rulebook/Content/Part/229754/16-11-2007 is not effective (code 410)
-    nodes_only <- ifelse(status_check == 200,
-                         pull200(x),
-                         NA)
-    return(nodes_only)
-  }
+  # pull_nodes to zzz.R
 
   # pull text
   if (type == "text") {
@@ -74,7 +58,7 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
     cat("\n")
 
     # call the helper function to scrape text
-    get_content_text()
+    get_content_text(x, selector_text, selector_rule, selector_date)
 
   }
 
@@ -87,4 +71,5 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
 
     get_content_links()
 
+}
 }
