@@ -66,6 +66,12 @@ scrape_menu <- function(url, selector, rulebook_date) {
     nodes_url <- NA
   }
 
+  # scrape rule IDs and create URLs from them
+  if (selector == "a") {
+    nodes_df <- scrape_menu_rule(nodes_only, rulebook_date)
+    return(nodes_df)
+  }
+
   # combine vectors
   nodes_df <- data.frame(name = nodes_text,
                          menu_url = nodes_url,
@@ -73,10 +79,4 @@ scrape_menu <- function(url, selector, rulebook_date) {
                          stringsAsFactors = FALSE)
 
   return(nodes_df)
-
-  # scrape rule IDs and create URLs from them
-  if (selector == "a") {
-    scrape_menu_rule()
-  }
-
 }
