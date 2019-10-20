@@ -28,5 +28,4 @@ scrape_rule_structure <- function(df, rulebook_date) {
                      by = "chapter_url")
 
   return(rules_chapters_parts_sectors)
-
 }
