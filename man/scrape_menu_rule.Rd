@@ -4,7 +4,7 @@
 \alias{scrape_menu_rule}
 \title{Scrape rules within the scrape_menu function}
 \usage{
-scrape_menu_rule()
+scrape_menu_rule(nodes_only, rulebook_date)
 }
 \value{
 Data frame
