@@ -6,11 +6,10 @@ citEntry(
   author   = "Zahid Amadxarif, James Brookes, Nicola Garbarino, Rajan Patel and Eryk Walczak",
   journal  = "Bank of England Staff Working Paper",
   year     = "2019",
-  volume   = ,
+  volume   = "834",
   number   = ,
   pages    = ,
   url      = "https://www.bankofengland.co.uk/working-paper/staff-working-papers",
   textVersion = paste(
-
   )
 )
