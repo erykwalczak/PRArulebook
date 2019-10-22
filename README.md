@@ -21,8 +21,9 @@ more amenable to text and network analysis.
 `PRArulebook` was developed while preparing:
 
 **Amadxarif, Z., Brookes, J., Garbarino, N., Patel, R., Walczak, E.
-(2019) *The Language of Rules: Textual Complexity in Banking Reforms*.
-Bank of England Staff Working Paper.**
+(2019) *[The Language of Rules: Textual Complexity in Banking
+Reforms.](https://www.bankofengland.co.uk/working-paper/staff-working-papers)*
+Staff Working Paper No. 834. Bank of England.**
 
 Any use of this package with the PRA Rulebook must comply with the PRA
 Rulebook’s [Terms of Use](http://www.prarulebook.co.uk/terms-of-use).
