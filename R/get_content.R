@@ -17,9 +17,14 @@
 #' }
 get_content <- function(x, type = "text", single_rule_selector = NULL) {
 
-  if (!startsWith(x, "http")) { # or WWW / prarulebook.co.uk
+  if (!startsWith(x, "http")) { # TODO or WWW / prarulebook.co.uk
     stop("Provide a valid URL.")
   }
+
+  # # TODO fix the checks
+  # if (type %in% c("text", "links")) {
+  #   stop("Provide a valid type to scrape: 'text' or 'links'.")
+  # }
 
   # TODO check the URL type?
 
