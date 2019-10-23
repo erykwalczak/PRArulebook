@@ -29,7 +29,7 @@ parts <- scrape_part_structure(sectors)
 
 See what was scraped:
 
-```{r, warning = FALSE, message = FALSE}
+```{r, warning = FALSE, message = FALSE, eval = FALSE}
 library(dplyr)
 
 dplyr::glimpse(parts)
@@ -38,7 +38,7 @@ dplyr::glimpse(parts)
 
 Visualise the structure:
 
-```{r, warning = FALSE, message = FALSE}
+```{r, warning = FALSE, message = FALSE, eval = FALSE}
 library(collapsibleTree)
 
 Handbook <- parts
