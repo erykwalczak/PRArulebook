@@ -22,6 +22,10 @@ library(PRArulebook)
 
 Get the structure:
 
+```{r, echo=FALSE}
+library(textclean)
+```
+
 ```{r}
 sectors <- scrape_sector_structure("http://www.prarulebook.co.uk/rulebook/Home/Handbook/22-03-2006")
 parts <- scrape_part_structure(sectors)
