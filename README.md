@@ -22,7 +22,7 @@ more amenable to text and network analysis.
 
 **Amadxarif, Z., Brookes, J., Garbarino, N., Patel, R., Walczak, E.
 (2019) *[The Language of Rules: Textual Complexity in Banking
-Reforms.](https://www.bankofengland.co.uk/working-paper/staff-working-papers)*
+Reforms.](https://www.bankofengland.co.uk/working-paper/2019/the-language-of-rules-textual-complexity-in-banking-reforms)*
 Staff Working Paper No. 834. Bank of England.**
 
 Any use of this package with the PRA Rulebook must comply with the PRA
@@ -118,6 +118,7 @@ library(purrr)
 chapters_text <-
   map_df(chapters$chapter_url[1:5],
                 get_content)
+# exception handling might be needed
 ```
 
 #### Network
