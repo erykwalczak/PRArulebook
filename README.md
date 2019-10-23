@@ -94,6 +94,14 @@ several layers and each of them can be passed to the `layer` argument of
 The output will be a data frame with information about the structure
 (i.e. URLs and names).
 
+Scraping individual rules is much slower so another function should be
+used
+
+``` r
+# extract all rules from the first three chapters
+rules <- scrape_rule_structure(chapters[1:3,], "18-06-2019")
+```
+
 ### Content
 
 Once the structure URLs are scraped, they can be used to extract
@@ -106,7 +114,9 @@ function with a URL of a given chapter.
 
 ``` r
 # scrape text from a single chapter
-chapter <- get_content(chapters$chapter_url[1])
+chapter_text <- get_content(chapters$chapter_url[1])
+# or single rule
+rule_text <- get_content(rules$rule_url[2], "text", "yes")
 ```
 
 This function can be applied on the entire rulebook in the following
@@ -120,6 +130,9 @@ chapters_text <-
                 get_content)
 # exception handling might be needed
 ```
+
+The output can be then joined to the information about the rulebook
+structure and aggregated at a higher level.
 
 #### Network
 
