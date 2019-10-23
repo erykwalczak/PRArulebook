@@ -7,7 +7,11 @@
 scrape_menu_rule(url, nodes_only, rulebook_date)
 }
 \arguments{
-\item{rulebook_date}{}
+\item{url}{String. URL to scrape.}
+
+\item{nodes_only}{XML nodes. Output of \code{"scrape_menu"}}
+
+\item{rulebook_date}{String. Date to scrape.}
 }
 \value{
 Data frame
