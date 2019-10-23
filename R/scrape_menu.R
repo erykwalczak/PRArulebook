@@ -16,6 +16,14 @@
 #' }
 scrape_menu <- function(url, selector, rulebook_date) {
 
+  if (!startsWith(url, "http")) { # TODO or WWW / prarulebook.co.uk
+    stop("Provide a valid URL.")
+  }
+
+  if (is.null(selector)) {
+    stop("Provide a valid selector to scrape.")
+  }
+
   # TODO add to zzz/onLoad (?)
   base_url <- "http://www.prarulebook.co.uk"
 
