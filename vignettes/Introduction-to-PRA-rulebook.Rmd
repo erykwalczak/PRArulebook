@@ -16,24 +16,20 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, eval = FALSE}
 library(PRArulebook)
 ```
 
 Get the structure:
 
-```{r, echo=FALSE}
-library(textclean)
-```
-
-```{r}
+```{r, eval = FALSE}
 sectors <- scrape_sector_structure("http://www.prarulebook.co.uk/rulebook/Home/Handbook/22-03-2006")
 parts <- scrape_part_structure(sectors)
 ```
 
 See what was scraped:
 
-```{r, warning = FALSE, message = FALSE}
+```{r, warning = FALSE, message = FALSE, eval = FALSE}
 library(dplyr)
 
 dplyr::glimpse(parts)
@@ -42,7 +38,7 @@ dplyr::glimpse(parts)
 
 Visualise the structure:
 
-```{r, warning = FALSE, message = FALSE}
+```{r, warning = FALSE, message = FALSE, eval = FALSE}
 library(collapsibleTree)
 
 Handbook <- parts
