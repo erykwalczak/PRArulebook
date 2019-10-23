@@ -1,8 +1,8 @@
 #' Scrape rule ID
 #'
-#' @param rule_urls Data frame with rule url. Output of \code{"scrape_rule_structure"}.
 #' @param selector_rule_no Rule number CSS selector
 #' @param selector_rule_text Rule text CSS selector
+#' @param url String. URL to scrape. Output from \code{"scrape_rule_structure"}.
 #'
 #' @return Data frame with rule text and links.
 #' @export
