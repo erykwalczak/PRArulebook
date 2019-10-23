@@ -68,7 +68,7 @@ scrape_menu <- function(url, selector, rulebook_date) {
 
   # scrape rule IDs and create URLs from them
   if (selector == "a") {
-    nodes_df <- scrape_menu_rule(nodes_only, rulebook_date)
+    nodes_df <- scrape_menu_rule(url, nodes_only, rulebook_date)
     return(nodes_df)
   }
 
