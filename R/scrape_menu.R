@@ -2,7 +2,7 @@
 #'
 #' Scrapes names and URLs from the PRA rulebook menu. The menu is on the left-hand side of the rulebook website.
 #'
-#' @param url Full URL to scrape
+#' @param url String. URL to scrape.
 #' @param selector String. CSS selector to scrape. Use Chrome with SelectorGadget to find the relevant selector.
 #' @param rulebook_date String. Optional date. Needed only for rule ID scraping.
 #'
@@ -16,7 +16,7 @@
 #' }
 scrape_menu <- function(url, selector, rulebook_date) {
 
-  # TODO add to onLoad
+  # TODO add to zzz/onLoad (?)
   base_url <- "http://www.prarulebook.co.uk"
 
   # pull the html nodes
