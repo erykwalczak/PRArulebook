@@ -2,6 +2,10 @@
 #'
 #' Helper function
 #'
+#' @param url
+#' @param nodes_only
+#' @param rulebook_date
+#'
 #' @return Data frame
 #' @export
 #'
@@ -16,7 +20,7 @@
 #'   rvest::html_nodes("a")
 #' scrape_menu_rule()
 #' }
-scrape_menu_rule <- function(nodes_only, rulebook_date) {
+scrape_menu_rule <- function(url, nodes_only, rulebook_date) {
   IDs <- nodes_only %>% rvest::html_attr("id") %>% na.omit()
 
   # test if empty
