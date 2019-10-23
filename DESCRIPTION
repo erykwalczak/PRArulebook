@@ -20,5 +20,6 @@ Imports:
     magrittr,
     stringr,
     future,
-    furrr
+    furrr,
+    textclean
 RoxygenNote: 6.1.1
