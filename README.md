@@ -3,13 +3,15 @@
 
 <!-- badges: start -->
 
-[![Project Status: Active â€“ The project has reached a stable, usable
-state and is being actively
+[![Project Status: Active Ã¢â‚¬â€œ The project has reached a stable,
+usable state and is being actively
 developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/PRArulebook)](https://cran.r-project.org/package=PRArulebook)
+[![Codecov test
+coverage](https://codecov.io/gh/erzk/PRArulebook/branch/master/graph/badge.svg)](https://codecov.io/gh/erzk/PRArulebook?branch=master)
 <!-- badges: end -->
 
 `PRArulebook` is a package to scrape the PRA (Prudential Regulation
