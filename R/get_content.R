@@ -11,9 +11,15 @@
 #'
 #' @examples
 #' \dontrun{
-#' get_content("http://www.prarulebook.co.uk/rulebook/Content/Chapter/242047/16-11-2007")
-#' get_content("http://www.prarulebook.co.uk/rulebook/Content/Chapter/242047/16-11-2007", "links")
-#' get_content("http://www.prarulebook.co.uk/rulebook/Content/Rule/211145/18-06-2019#211145", "text", "yes")
+#' get_content(
+#' "http://www.prarulebook.co.uk/rulebook/Content/Chapter/242047/16-11-2007")
+#' get_content(
+#' "http://www.prarulebook.co.uk/rulebook/Content/Chapter/242047/16-11-2007",
+#' "links")
+#' get_content(
+#' "http://www.prarulebook.co.uk/rulebook/Content/Rule/211145/18-06-2019#211145",
+#' "text",
+#' "yes")
 #' }
 get_content <- function(x, type = "text", single_rule_selector = NULL) {
 
