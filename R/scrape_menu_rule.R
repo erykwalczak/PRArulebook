@@ -21,7 +21,7 @@
 #' scrape_menu_rule()
 #' }
 scrape_menu_rule <- function(url, nodes_only, rulebook_date) {
-  IDs <- nodes_only %>% rvest::html_attr("id") %>% na.omit()
+  IDs <- nodes_only %>% rvest::html_attr("id") %>% stats::na.omit()
 
   # TODO test if empty
   # e.g. http://www.prarulebook.co.uk/rulebook/Content/Chapter/302933/16-11-2017
