@@ -39,5 +39,5 @@ test_that("scrape_rule_structure works", {
   returned_names <- names(rules_test)
   expect_identical(expected_names, returned_names)
   # check the expected dimensions
-  expect_identical(c(31, 12), dim(rules_test))
+  expect_equal(c(31, 12), dim(rules_test))
 })
