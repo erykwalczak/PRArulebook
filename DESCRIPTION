@@ -1,8 +1,7 @@
 Package: PRArulebook
 Title: Scraper for the Prudential Regulation Authority rulebook
 Version: 0.0.0.98
-Authors@R: person("Eryk", "Walczak", email = "erykjwalczak@gmail.com", 
-role = c("aut", "cre"), comment = c(ORCID = "0000-0001-8724-462X"))
+Authors@R: person("Eryk", "Walczak", email = "erykjwalczak@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-8724-462X"))
 Maintainer: Eryk Walczak <eryk.j.walczak@gmail.com>
 Description: Scrape the Prudential Regulation Authority rulebook.
 Depends: R (>= 3.6.0)
