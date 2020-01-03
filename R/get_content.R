@@ -76,30 +76,30 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
 
     # scrape
     nodes_only_text <- pull_nodes(selector_text)
-    nodes_text <- nodes_only_text %>% rvest::html_text()
+    nodes_text <- nodes_only_text %>% rvest::html_text() %>% trimws()
 
     # TODO pull rule names/turn into df/clean
     # pull rules
     nodes_only_rule <- pull_nodes(selector_rule)
-    nodes_rule <- nodes_only_rule %>% rvest::html_text()
+    nodes_rule <- nodes_only_rule %>% rvest::html_text() %>% trimws()
     # remove the first element to equalise the length of text and rules
     nodes_rule <- nodes_rule[-1]
 
     # test DATE and LABEL
     # TODO turn into a function
     nodes_only_date <- pull_nodes(selector_date)
-    nodes_date <- nodes_only_date %>% rvest::html_text()
+    nodes_date <- nodes_only_date %>% rvest::html_text() %>% trimws()
     nodes_date <- nodes_date[-1]
 
     # check if content is available, i.e. chapter/part was effective
     if (length(nodes_only_text) > 0) {
 
-      if (length(nodes_text) == length(nodes_rule)) {
+      if (length(nodes_text) == length(nodes_rule) & length(nodes_text) == length(nodes_date)) {
 
         rule_text_df <-
-          data.frame(rule_number = trimws(nodes_rule),
-                     rule_text = trimws(nodes_text),
-                     rule_date = trimws(nodes_date),
+          data.frame(rule_number = nodes_rule,
+                     rule_text = nodes_text,
+                     rule_date = nodes_date,
                      url = x,
                      stringsAsFactors = FALSE)
         # TODO clean rule_text_df
@@ -107,12 +107,29 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
 
         # deleted rules
         # e.g. MAR 4.1.3 http://www.prarulebook.co.uk/rulebook/Content/Chapter/242047/16-11-2007#242057
-        rule_text_df$active <- !stringr::str_detect(rule_text_df$rule_number, "Inactive date")
+        rule_text_df$active <-
+          !stringr::str_detect(rule_text_df$rule_number, "Inactive date")
 
         # TODO split rule into date rule etc.
         return(rule_text_df)
 
-        # TODO when NA or unequal return a list?
+        # when unequal length return a simpler data frame (or a list?)
+      }
+      if (length(nodes_text) == length(nodes_rule)) {
+        warning("Returning data frame with text without dates.")
+
+        rule_text_df <-
+          data.frame(rule_number = nodes_rule,
+                     rule_text = nodes_text,
+                     url = x,
+                     stringsAsFactors = FALSE)
+        # TODO clean rule_text_df
+        # TODO rename 'url' based on the input type: chapter/rule etc.
+
+        rule_text_df$active <-
+          !stringr::str_detect(rule_text_df$rule_number, "Inactive date")
+
+        return(rule_text_df)
       }
     } else {
       rule_text_df <- data.frame(rule_number = NA,
