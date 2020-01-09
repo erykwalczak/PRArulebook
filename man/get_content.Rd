@@ -4,12 +4,15 @@
 \alias{get_content}
 \title{Scrape the Rulebook content}
 \usage{
-get_content(x, type = "text", single_rule_selector = NULL)
+get_content(x, type = "text", output = NULL,
+  single_rule_selector = NULL)
 }
 \arguments{
 \item{x}{String. URL to scrape.}
 
 \item{type}{String. Type of information to scrape. "text" or "links".}
+
+\item{output}{String. Output format. "simple" returns "text" data without dates.}
 
 \item{single_rule_selector}{String. Optional. CSS selector for individual rules.}
 }
