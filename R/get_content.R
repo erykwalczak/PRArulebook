@@ -89,9 +89,9 @@ get_content <- function(x, type = "text", output = NULL, single_rule_selector = 
     extract_node_text <- function(y) {
 
       nodes_text <-
-        ifelse(!is.na(y),
-               y %>% rvest::html_text() %>% trimws(),
-               NA)
+        ifelse(is.na(y) | length(y) == 0,
+               NA,
+               y %>% rvest::html_text() %>% trimws())
       return(nodes_text)
     }
 
