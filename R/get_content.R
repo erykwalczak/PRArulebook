@@ -4,7 +4,6 @@
 #'
 #' @param x String. URL to scrape.
 #' @param type String. Type of information to scrape. "text" or "links".
-#' @param output String. Output format. "simple" returns "text" data without dates.
 #' @param single_rule_selector String. Optional. CSS selector for individual rules.
 #'
 #' @return Data frame with URLs and corresponding text.
@@ -20,9 +19,9 @@
 #' get_content(
 #' "http://www.prarulebook.co.uk/rulebook/Content/Rule/211145/18-06-2019#211145",
 #' "text",
-#' "yes")
+#' single_rule_selector = "yes")
 #' }
-get_content <- function(x, type = "text", output = NULL, single_rule_selector = NULL) {
+get_content <- function(x, type = "text", single_rule_selector = NULL) {
 
   if (!startsWith(x, "http")) { # TODO or WWW / prarulebook.co.uk
     stop("Provide a valid URL.")
@@ -39,20 +38,28 @@ get_content <- function(x, type = "text", output = NULL, single_rule_selector = 
   #selector_rule <- ".rule-number"
   selector_rule <- ".col1"
   selector_text <- ".col3"
-  selector_date <- ".effective-date"
-  #selector_label <- ".rule-label"
+  #selector_date <- ".effective-date"
+  #selector_label <- ".rule-labels"
 
   # rules require specific selector
   if (is.null(single_rule_selector)) {
     selector_links <- ".col3 a"
   }
 
-  if (!is.null(single_rule_selector) && single_rule_selector == "yes") {
+  # check correct argument
+  # DEV: !is.null(single_rule_selector) & length(single_rule_selector) > 0 &
+  # & single_rule_selector == "yes"
+  if (!is.null(single_rule_selector)) {
+    if (single_rule_selector != "yes") { # TODO or WWW / prarulebook.co.uk
+      stop("Use 'single_rule_selector' set to 'yes' if you want to scrape single rules.")
+    }
     # get the rule ID
     # TODO write a more robust regex
     rule_id <- stringr::str_sub(x, start = -6)
-    # create the selector
-    selector_links <- paste0("#", rule_id, "+ .div-row a")
+    # create a selector for rule text
+    selector_text <- paste0("#", rule_id, "+ .div-row .col3")
+    # and rule
+    selector_rule <- paste0("#", rule_id, "+ .div-row .col1")
   }
 
   # TODO return NA when selectors are not present
@@ -103,30 +110,33 @@ get_content <- function(x, type = "text", output = NULL, single_rule_selector = 
     nodes_only_rule <- pull_nodes(selector_rule)
     nodes_rule <- extract_node_text(nodes_only_rule)
     # remove the first element to equalise the length of text and rules
-    nodes_rule <- ifelse(!is.na(nodes_rule), nodes_rule[-1], nodes_rule)
+    # fails:
+    nodes_rule <- ifelse(sum(!is.na(nodes_rule)) > 1, nodes_rule[-1], nodes_rule)
 
     # test DATE and LABEL
     # TODO turn into a function
-    nodes_only_date <- pull_nodes(selector_date)
-    nodes_date <- extract_node_text(nodes_only_date)
-    nodes_date <- ifelse(!is.na(nodes_date), nodes_date[-1], nodes_date)
+    # nodes_only_date <- pull_nodes(selector_date)
+    # nodes_date <- extract_node_text(nodes_only_date)
+    # nodes_date <- nodes_date[-1]
 
     # check if content is available, i.e. chapter/part was effective
     if (length(nodes_only_text) > 0 & !is.na(nodes_only_text)) {
 
-      if (output == "simple") {
-        rule_text_df <-
-          data.frame(rule_number = NA,
-                     rule_text = nodes_text,
-                     url = x,
-                     stringsAsFactors = FALSE)
-
-        return(rule_text_df)
-      }
+      # # text-only output
+      # # output is null by default so a check is needed if !is.null
+      # if (!is.null(output) & output == "simple") {
+      #   rule_text_df <-
+      #     data.frame(rule_number = NA,
+      #                rule_text = nodes_text,
+      #                url = x,
+      #                stringsAsFactors = FALSE)
+      #
+      #   return(rule_text_df)
+      # }
 
       # when unequal length return a simpler data frame
       if (length(nodes_text) == length(nodes_rule)) {
-        warning("Returning data frame with text without dates.")
+        #warning("Returning data frame with text without dates.")
 
         rule_text_df <-
           data.frame(rule_number = nodes_rule,
@@ -142,12 +152,12 @@ get_content <- function(x, type = "text", output = NULL, single_rule_selector = 
         return(rule_text_df)
       }
 
-      if (length(nodes_text) == length(nodes_rule) & length(nodes_text) == length(nodes_date)) {
+      if (length(nodes_text) == length(nodes_rule)) {
 
         rule_text_df <-
           data.frame(rule_number = nodes_rule,
                      rule_text = nodes_text,
-                     rule_date = nodes_date,
+                     #rule_date = nodes_date,
                      url = x,
                      stringsAsFactors = FALSE)
         # TODO clean rule_text_df
