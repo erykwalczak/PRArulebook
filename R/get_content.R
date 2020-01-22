@@ -36,7 +36,7 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
 
   # CSS selectors
   #selector_rule <- ".rule-number"
-  selector_rule <- ".col1"
+  selector_rule <- ".col1" # TODO??? get separate selectors?
   selector_text <- ".col3"
   #selector_date <- ".effective-date"
   #selector_label <- ".rule-labels"
@@ -65,6 +65,7 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
   # TODO return NA when selectors are not present
 
   # wrap in a function
+  # TODO - export to helper functions, add x to arg, double-check all calls
   pull_nodes <- function(node_to_pull) {
 
     nodes_only_get <- httr::GET(x)
@@ -122,36 +123,7 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
     # check if content is available, i.e. chapter/part was effective
     if (length(nodes_only_text) > 0 & !is.na(nodes_only_text)) {
 
-      # # text-only output
-      # # output is null by default so a check is needed if !is.null
-      # if (!is.null(output) & output == "simple") {
-      #   rule_text_df <-
-      #     data.frame(rule_number = NA,
-      #                rule_text = nodes_text,
-      #                url = x,
-      #                stringsAsFactors = FALSE)
-      #
-      #   return(rule_text_df)
-      # }
-
-      # when unequal length return a simpler data frame
-      if (length(nodes_text) == length(nodes_rule)) {
-        #warning("Returning data frame with text without dates.")
-
-        rule_text_df <-
-          data.frame(rule_number = nodes_rule,
-                     rule_text = nodes_text,
-                     url = x,
-                     stringsAsFactors = FALSE)
-        # TODO clean rule_text_df
-        # TODO rename 'url' based on the input type: chapter/rule etc.
-
-        rule_text_df$active <-
-          !stringr::str_detect(rule_text_df$rule_number, "Inactive date")
-
-        return(rule_text_df)
-      }
-
+      # check if length if equal
       if (length(nodes_text) == length(nodes_rule)) {
 
         rule_text_df <-
@@ -173,10 +145,13 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
       }
     }
     else {
-    rule_text_df <- data.frame(rule_number = NA,
-                               rule_text = NA,
-                               url = x)
-    return(rule_text_df)
+      #display info
+      print(paste0("Check the quality of ", x))
+
+      rule_text_df <- data.frame(rule_number = NA,
+                                 rule_text = NA,
+                                 url = x)
+      return(rule_text_df)
     }
   }
 
