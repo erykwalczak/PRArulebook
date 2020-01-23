@@ -43,7 +43,7 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
 
   # rules require specific selector
   if (is.null(single_rule_selector)) {
-    selector_links <- ".col3 a"
+    selector_links <- ".col3 a" # TODO: move up?
   }
 
   # check correct argument
@@ -60,6 +60,8 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
     selector_text <- paste0("#", rule_id, "+ .div-row .col3")
     # and rule
     selector_rule <- paste0("#", rule_id, "+ .div-row .col1")
+    # links - TODO: check
+    selector_links <- paste0("#", rule_id, "+ .div-row .col3 a")
   }
 
   # TODO return NA when selectors are not present
