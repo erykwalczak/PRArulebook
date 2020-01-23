@@ -110,10 +110,25 @@ This function can be applied on the entire rulebook in the following way:
 ```{r, eval = FALSE}
 library(purrr)
 
+# TODO: broken
 chapters_text <-
   map_df(chapters$chapter_url[1:5],
                 get_content)
 # exception handling might be needed
+
+# text
+rules_text <-
+  map_df(rules$rule_url[1:5],
+         get_content,
+         type = "text",
+         single_rule_selector = "yes")
+
+# links
+rules_links <-
+  map_df(rules$rule_url[1:5],
+         get_content,
+         type = "links",
+         single_rule_selector = "yes")
 ```
 
 The output can be then joined to the information about the rulebook structure and aggregated at a higher level.
