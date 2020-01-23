@@ -113,7 +113,7 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
     nodes_only_rule <- pull_nodes(selector_rule)
     nodes_rule <- extract_node_text(nodes_only_rule)
     # remove the first element to equalise the length of text and rules
-    # fails:
+    # TODO fails for non-rules !!!!!!!!!!!!
     nodes_rule <- ifelse(sum(!is.na(nodes_rule)) > 1, nodes_rule[-1], nodes_rule)
 
     # test DATE and LABEL
