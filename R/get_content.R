@@ -40,11 +40,7 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
   selector_text <- ".col3"
   #selector_date <- ".effective-date"
   #selector_label <- ".rule-labels"
-
-  # rules require specific selector
-  if (is.null(single_rule_selector)) {
-    selector_links <- ".col3 a" # TODO: move up?
-  }
+  selector_links <- ".col3 a"
 
   # check correct argument
   # DEV: !is.null(single_rule_selector) & length(single_rule_selector) > 0 &
@@ -114,7 +110,9 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
     nodes_rule <- extract_node_text(nodes_only_rule)
     # remove the first element to equalise the length of text and rules
     # TODO fails for non-rules !!!!!!!!!!!!
-    nodes_rule <- ifelse(sum(!is.na(nodes_rule)) > 1, nodes_rule[-1], nodes_rule)
+    if (is.null(single_rule_selector)) {
+      nodes_rule <- nodes_rule[2:length(nodes_rule)]
+    }
 
     # test DATE and LABEL
     # TODO turn into a function
@@ -152,7 +150,9 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
 
       rule_text_df <- data.frame(rule_number = NA,
                                  rule_text = NA,
-                                 url = x)
+                                 url = x,
+                                 active = NA,
+                                 stringsAsFactors = FALSE)
       return(rule_text_df)
     }
   }
