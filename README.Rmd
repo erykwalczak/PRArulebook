@@ -110,11 +110,11 @@ This function can be applied on the entire rulebook in the following way:
 ```{r, eval = FALSE}
 library(purrr)
 
-# TODO: broken
+# text: chapter-level
+# exception handling might be needed
 chapters_text <-
   map_df(chapters$chapter_url[1:5],
                 get_content)
-# exception handling might be needed
 
 # text
 rules_text <-
