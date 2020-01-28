@@ -27,31 +27,23 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
     stop("Provide a valid URL.")
   }
 
-  # # TODO fix the checks
-  # if (type %in% c("text", "links")) {
-  #   stop("Provide a valid type to scrape: 'text' or 'links'.")
-  # }
-
   # TODO check the URL type?
 
   # CSS selectors
   #selector_rule <- ".rule-number"
-  selector_rule <- ".col1" # TODO??? get separate selectors?
+  selector_rule <- ".col1"
   selector_text <- ".col3"
   #selector_date <- ".effective-date"
-  #selector_label <- ".rule-labels"
+  #selector_label <- ".rule-labels li"
   selector_links <- ".col3 a"
 
   # check correct argument
-  # DEV: !is.null(single_rule_selector) & length(single_rule_selector) > 0 &
-  # & single_rule_selector == "yes"
   if (!is.null(single_rule_selector)) {
-    if (single_rule_selector != "yes") { # TODO or WWW / prarulebook.co.uk
+    if (single_rule_selector != "yes") {
       stop("Use 'single_rule_selector' set to 'yes' if you want to scrape single rules.")
     }
     # get the rule ID
-    # TODO write a more robust regex
-    rule_id <- stringr::str_sub(x, start = -6)
+    rule_id <- sub(".*#", "", x)
     # create a selector for rule text
     selector_text <- paste0("#", rule_id, "+ .div-row .col3")
     # and rule
