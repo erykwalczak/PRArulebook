@@ -54,27 +54,6 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
 
   # TODO return NA when selectors are not present
 
-  # wrap in a function
-  # TODO - export to helper functions, add x to arg, double-check all calls
-  pull_nodes <- function(node_to_pull) {
-
-    nodes_only_get <- httr::GET(x)
-
-    # check if part is effective
-    if (httr::status_code(nodes_only_get) == 200) {
-
-      nodes_only <- nodes_only_get %>%
-        xml2::read_html() %>%
-        rvest::html_nodes(node_to_pull)
-
-      return(nodes_only)
-    }
-    # if not 200 then return NA
-    # e.g. http://www.prarulebook.co.uk/rulebook/Content/Part/229754/16-11-2007
-    nodes_only <- NA
-    return(nodes_only)
-  }
-
   # pull text
   if (type == "text") {
     # works on a chapter level
@@ -83,23 +62,13 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
     cat(".")
     cat("\n")
 
-    # function to extract text
-    extract_node_text <- function(y) {
-
-      nodes_text <-
-        ifelse(is.na(y) | length(y) == 0,
-               NA,
-               y %>% rvest::html_text() %>% trimws())
-      return(nodes_text)
-    }
-
     # scrape
-    nodes_only_text <- pull_nodes(selector_text)
-    nodes_text <- extract_node_text(nodes_only_text)
+    nodes_only_text <- PRArulebook:::pull_nodes(x, selector_text)
+    nodes_text <- PRArulebook:::extract_node_text(nodes_only_text)
 
     # pull rules
-    nodes_only_rule <- pull_nodes(selector_rule)
-    nodes_rule <- extract_node_text(nodes_only_rule)
+    nodes_only_rule <- PRArulebook:::pull_nodes(x, selector_rule)
+    nodes_rule <- PRArulebook:::extract_node_text(nodes_only_rule)
     # remove the first element to equalise the length of text and rules
     # TODO fails for non-rules !!!!!!!!!!!!
     if (is.null(single_rule_selector)) {
@@ -108,8 +77,8 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
 
     # test DATE and LABEL
     # TODO turn into a function
-    # nodes_only_date <- pull_nodes(selector_date)
-    # nodes_date <- extract_node_text(nodes_only_date)
+    # nodes_only_date <- PRArulebook:::pull_nodes(x, selector_date)
+    # nodes_date <- PRArulebook:::extract_node_text(nodes_only_date)
     # nodes_date <- nodes_date[-1]
 
     # check if content is available, i.e. chapter/part was effective
@@ -157,7 +126,7 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
     cat("\n")
 
     # extract the links
-    nodes_only_links <- pull_nodes(selector_links)
+    nodes_only_links <- PRArulebook:::pull_nodes(x, selector_links)
 
     # assign NAs if there are no links
     if (length(nodes_only_links) == 0) {
