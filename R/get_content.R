@@ -46,9 +46,9 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
     rule_id <- sub(".*#", "", x)
     # create a selector for rule text
     selector_text <- paste0("#", rule_id, "+ .div-row .col3")
-    # and rule
+    # rule column
     selector_rule <- paste0("#", rule_id, "+ .div-row .col1")
-    # links - TODO: check
+    # links
     selector_links <- paste0("#", rule_id, "+ .div-row .col3 a")
   }
 
@@ -65,21 +65,19 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
     # scrape
     nodes_only_text <- PRArulebook:::pull_nodes(x, selector_text)
     nodes_text <- PRArulebook:::extract_node_text(nodes_only_text)
+    # check the length
+    if (length(nodes_only_text) == 0) {
+      nodes_only_text <- NA
+    }
 
     # pull rules
     nodes_only_rule <- PRArulebook:::pull_nodes(x, selector_rule)
     nodes_rule <- PRArulebook:::extract_node_text(nodes_only_rule)
     # remove the first element to equalise the length of text and rules
-    # TODO fails for non-rules !!!!!!!!!!!!
-    if (is.null(single_rule_selector)) {
+    # run it only for non-rules (i.e. higher levels like chapter etc.)
+    if (is.null(single_rule_selector) & length(nodes_rule) > 1) {
       nodes_rule <- nodes_rule[2:length(nodes_rule)]
     }
-
-    # test DATE and LABEL
-    # TODO turn into a function
-    # nodes_only_date <- PRArulebook:::pull_nodes(x, selector_date)
-    # nodes_date <- PRArulebook:::extract_node_text(nodes_only_date)
-    # nodes_date <- nodes_date[-1]
 
     # check if content is available, i.e. chapter/part was effective
     if (length(nodes_only_text) > 0 & !is.na(nodes_only_text)) {
@@ -90,7 +88,6 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
         rule_text_df <-
           data.frame(rule_number = nodes_rule,
                      rule_text = nodes_text,
-                     #rule_date = nodes_date,
                      url = x,
                      stringsAsFactors = FALSE)
         # TODO clean rule_text_df
