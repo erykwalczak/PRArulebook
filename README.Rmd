@@ -102,7 +102,7 @@ To get content of the rulebook (text or links) use `get_content` function with a
 # scrape text from a single chapter
 chapter_text <- get_content(chapters$chapter_url[1])
 # or single rule
-rule_text <- get_content(rules$rule_url[2], "text", "yes")
+rule_text <- get_content(rules$rule_url[3], "text", "yes")
 ```
 
 This function can be applied on the entire rulebook in the following way:
