@@ -59,7 +59,7 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
     # works on a chapter level
 
     # display
-    cat(".")
+    cat(x)
     cat("\n")
 
     # scrape
