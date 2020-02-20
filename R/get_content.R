@@ -3,8 +3,12 @@
 #' Extract the full text or links from the PRA Rulebook given the URL.
 #'
 #' @param x String. URL to scrape.
-#' @param type String. Type of information to scrape. "text" or "links".
-#' @param single_rule_selector String. Optional. CSS selector for individual rules.
+#' @param type String. Type of information to scrape.
+#' Valid arguments: "text" or "links".
+#' @param single_rule_selector String. Optional.
+#' Is CSS there a selector for individual rules? If "yes" then provide
+#' rule-level URLs to scrape. Leave blank for levels levels
+#' above rule (e.g. chapter, part or sector).
 #'
 #' @return Data frame with URLs and corresponding text.
 #' @export
@@ -118,8 +122,8 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
   # pull links
   if (type == "links") {
 
-    # display
-    cat(".")
+    # display the URL - useful for debugging
+    cat(x)
     cat("\n")
 
     # extract the links
