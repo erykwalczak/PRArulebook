@@ -56,7 +56,11 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
     selector_links <- paste0("#", rule_id, "+ .div-row .col3 a")
   }
 
-  # TODO return NA when selectors are not present
+  # check if url is a glossary. if so, use glossary-specific selectors
+  if (grepl("Glossary", x)) {
+    selector_text <- ".GlossaryPara"
+    selector_links <- ".GlossaryPara a"
+  }
 
   # pull text
   if (type == "text") {
