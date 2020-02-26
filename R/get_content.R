@@ -134,14 +134,16 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
     nodes_only_links <- PRArulebook:::pull_nodes(x, selector_links)
 
     # assign NAs if there are no links
-    if (length(nodes_only_links) == 0) {
+    # e.g. http://www.prarulebook.co.uk/rulebook/Glossary/FullDefinition/64738/16-05-2005
+    empty_nodes_only_links <- length(nodes_only_links) == 0 | is.na(nodes_only_links)
+
+    if (empty_nodes_only_links) {
 
       nodes_links_text <- NA
       nodes_links <- NA
+      }
 
-    }
-
-    if (length(nodes_only_links) != 0) {
+    if (!empty_nodes_only_links) {
 
       nodes_links_text <-
         nodes_only_links %>%
