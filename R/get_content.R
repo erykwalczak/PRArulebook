@@ -135,7 +135,7 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
 
     # assign NAs if there are no links
     # e.g. http://www.prarulebook.co.uk/rulebook/Glossary/FullDefinition/64738/16-05-2005
-    empty_nodes_only_links <- length(nodes_only_links) == 0 | is.na(nodes_only_links)
+    empty_nodes_only_links <- any(length(nodes_only_links) == 0, is.na(nodes_only_links))
 
     if (empty_nodes_only_links) {
 
