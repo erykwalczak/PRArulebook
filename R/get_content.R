@@ -31,8 +31,6 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
     stop("Provide a valid URL.")
   }
 
-  # TODO check the URL type?
-
   # CSS selectors
   #selector_rule <- ".rule-number"
   selector_rule <- ".col1"
@@ -45,6 +43,10 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
   if (!is.null(single_rule_selector)) {
     if (single_rule_selector != "yes") {
       stop("Use 'single_rule_selector' set to 'yes' if you want to scrape single rules.")
+    }
+    # check if URL is correct
+    if (!grepl("Content/Rule", x)) {
+      stop("Use rule-level URLs.")
     }
     # get the rule ID
     rule_id <- sub(".*#", "", x)
@@ -59,12 +61,12 @@ get_content <- function(x, type = "text", single_rule_selector = NULL) {
   # check if url is a glossary. if so, use glossary-specific selectors
   if (grepl("Glossary", x)) {
     selector_text <- ".GlossaryPara"
+    selector_rule <- ".glossary-term"
     selector_links <- ".GlossaryPara a"
   }
 
   # pull text
   if (type == "text") {
-    # works on a chapter level
 
     # display
     cat(x)
