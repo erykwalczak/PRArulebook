@@ -6,7 +6,7 @@
 # extract nodes - used in get_content
 pull_nodes <- function(x, node_to_pull) {
 
-  nodes_only_get <- httr::GET(x)
+  nodes_only_get <- httr::RETRY("GET", x, times = 5, pause_min = 5, pause_base = 2)
 
   # check if part is effective
   if (httr::status_code(nodes_only_get) == 200) {
