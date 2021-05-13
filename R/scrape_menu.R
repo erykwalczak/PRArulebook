@@ -33,7 +33,7 @@ scrape_menu <- function(url, selector, rulebook_date) {
   # pull the html nodes
   # TODO add ua
   nodes_only <-
-    httr::RETRY("GET", url, times = 5, pause_min = 5, pause_base = 2) %>%
+    httr::RETRY("GET", url, times = 5) %>%
     PRArulebook:::extract_results()
 
   if (is.null(nodes_only)) {

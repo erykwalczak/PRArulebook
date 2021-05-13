@@ -26,7 +26,7 @@ scrape_rule_id <- function(url, selector_rule_no, selector_rule_text) {
   }
 
   rules_html <-
-    httr::RETRY("GET", url, times = 5, pause_min = 5, pause_base = 2) %>%
+    httr::RETRY("GET", url, times = 5) %>%
     xml2::read_html()
 
   # pull text
