@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![CRAN status](https://www.r-pkg.org/badges/version/PRArulebook)](https://cran.r-project.org/package=PRArulebook)
 [![Codecov test coverage](https://codecov.io/gh/erzk/PRArulebook/branch/master/graph/badge.svg)](https://codecov.io/gh/erzk/PRArulebook?branch=master)
+[![DOI](https://zenodo.org/badge/192198090.svg)](https://zenodo.org/badge/latestdoi/192198090)
 <!-- badges: end -->
 
 `PRArulebook` is a package to scrape the PRA (Prudential Regulation Authority) [Rulebook](http://www.prarulebook.co.uk/) (the website containing the rules made and enforced by the PRA under powers conferred by the Financial Services and Markets Act 2000 (FSMA)).
